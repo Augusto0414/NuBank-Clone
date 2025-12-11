@@ -7,5 +7,8 @@
     "back": "Atrás", 
     "welcome_security": "Dejaste la puerta abierta y, para proteger tu app, la cerraremos por ti. Usa tu contraseña, huella o rostro para volver a entrar.", 
     "login_button": "Usar huella o rostro" , 
-    "password_button": "Entrar con contraseña"
+    "password_button": "Entrar con contraseña", 
+    "password_title": "Ingresa tu contraseña de almenos 8 caracteres",
+    "password_forgot": "Olvidé la contraseña?"
+
 }

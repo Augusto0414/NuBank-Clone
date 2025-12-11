@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -8,6 +9,7 @@ const LOGO = require("../../assets/img/LOGO.png");
 const Login = () => {
   const insets = useSafeAreaInsets(); 
   const { t } = useTranslation();
+  const route = useNavigation(); 
 
   return (
     <View
@@ -31,7 +33,7 @@ const Login = () => {
           <Text style={styles.buttomLogin}>{t('login_button')}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity activeOpacity={0.7} onPress={() => {}}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => {route.navigate('PasswordView' as never)}}>
           <Text style={styles.buttomPassword}>{t('password_button')}</Text>
         </TouchableOpacity>
       </View>
