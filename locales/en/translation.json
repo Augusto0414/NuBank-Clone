@@ -4,5 +4,8 @@
     "register": "Register",
     "overview_title": "Service Overview",
     "details_title": "Service Details",
-    "back": "Back"
+    "back": "Back", 
+    "welcome_security": "You left the door open, and to protect your app, we’ll close it for you. Use your password, fingerprint, or face to get back in", 
+    "login_button": "Use Fingerprint or Face" , 
+    "password_button": "Use Password Instead" 
 }
