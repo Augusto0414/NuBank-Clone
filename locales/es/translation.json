@@ -9,6 +9,10 @@
     "login_button": "Usar huella o rostro" , 
     "password_button": "Entrar con contraseña", 
     "password_title": "Ingresa tu contraseña de almenos 8 caracteres",
-    "password_forgot": "Olvidé la contraseña?"
+    "password_forgot": "Olvidé la contraseña?", 
+    "reset_password": "Para restablecer tu contraseña, volverás a iniciar sesión.", 
+    "reset_password_info": "Ingresa tu documento de identidad y seleciona la opción 'Olvidé la contraseña'.",
+    "button_submit": "Continuar",
+    "button_cancel": "Cancelar"
 
 }

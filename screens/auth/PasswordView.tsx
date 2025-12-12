@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { HandleBottomSheet } from 'components/BottomSheet';
 import { COLORS } from 'constants/Colors';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +16,10 @@ const PasswordView = () => {
   const {t} = useTranslation();
   const insets = useSafeAreaInsets(); 
   const navigate = useNavigation();
+const [isActiveBottomSheet, setIsActiveBottomSheet] = useState<boolean>(false);
 const [isPasswordVisisible, setIsPasswordVisisible] = useState<boolean>(false);
+const handleOpenBottomSheet = () => setIsActiveBottomSheet((prev) => !prev);
+  
   return (
     <View style={{paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1, paddingHorizontal: 25, backgroundColor: "#FFFFFF"}}>
       <View style={{marginTop: 30}}>
@@ -40,14 +44,65 @@ const [isPasswordVisisible, setIsPasswordVisisible] = useState<boolean>(false);
           </TouchableOpacity>
        </View>
        
-       <View style={{flexDirection: "row", alignItems: "center"}}>
+       <TouchableOpacity style={{flexDirection: "row", alignItems: "center"}} onPress={() => {handleOpenBottomSheet()}}>
         <Text style={styles.forgotPasswordText}>{t("password_forgot")}</Text>
         <Ionicons style={[styles.icon, {color: BACKGROUND_COLOR}]} name="arrow-forward" size={28} />
-       </View>
-       
-       <TouchableOpacity activeOpacity={0.7} style={styles.button} onPress={() => {}}>
-         <Ionicons style={styles.icon} name="arrow-forward" size={28} color="#000" />
        </TouchableOpacity>
+       
+      <TouchableOpacity 
+        activeOpacity={0.7} 
+        style={styles.button}
+      >
+        <Ionicons style={styles.icon} name="arrow-forward" size={28} color="#000" />
+      </TouchableOpacity>
+
+      <HandleBottomSheet isVisible={isActiveBottomSheet} onClose={() => setIsActiveBottomSheet(false)}>
+        <View style={{ paddingVertical: 30 }}>
+          <Text style={{ fontSize: 30, fontWeight: '600', color: '#000' }}>
+            {t("reset_password")}
+          </Text>
+          <Text style={{ fontSize: 18, marginTop: 10, color: '#666' }}>
+            {t("reset_password_info")}
+          </Text>
+          <View>
+            <TouchableOpacity
+              style={{
+                marginTop: 30,
+                backgroundColor: BACKGROUND_COLOR,
+                paddingVertical: 15,
+                borderRadius: 30,
+                alignItems: 'center',
+              }}
+              activeOpacity={0.7}
+              onPress={() => {
+                setIsActiveBottomSheet(false);
+              }}
+            >
+              <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>
+                {t("button_submit")}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                marginTop: 15,
+                paddingVertical: 15,
+                borderRadius: 30,
+                alignItems: 'center',
+                backgroundColor: LIGHT_GRAY
+              }}
+              activeOpacity={0.7}
+              onPress={() => {
+                setIsActiveBottomSheet(false);
+              }}
+            >
+              <Text style={{ color: '#000', fontSize: 14, fontWeight: '600' }}>
+                {t("button_cancel")}
+              </Text>
+            </TouchableOpacity> 
+          </View> 
+        </View>
+      </HandleBottomSheet>
+     
     </View>
   )
 }
