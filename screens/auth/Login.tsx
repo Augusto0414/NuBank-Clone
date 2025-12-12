@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { COLORS } from 'constants/Colors';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -6,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const LOGO = require("../../assets/img/LOGO.png");
 
+const {BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, DARK_BUTON_LOGIN} = COLORS; 
 const Login = () => {
   const insets = useSafeAreaInsets(); 
   const { t } = useTranslation();
@@ -45,7 +47,7 @@ const Login = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#8F23D6",
+    backgroundColor: BACKGROUND_COLOR,
     paddingHorizontal: 20,
     alignItems: "center",
   },
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
   },
 
   infoDescriptionText: {
-    color: "#FFFFFF",
+    color:DARK_BUTON_TEXT_COLOR ,
     textAlign: "justify",
     fontSize: 18,
     marginBottom: 40,
@@ -77,15 +79,15 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "center",
     borderRadius: 20,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: DARK_BUTON_LOGIN,
     paddingVertical: 15,
-    color: "#000",
+    color: "transparent",
   },
 
   buttomPassword: {
     width: "100%",
     textAlign: "center",
-    color: "#FFFFFF",
+    color: DARK_BUTON_TEXT_COLOR,
     paddingVertical: 10,
   },
 });
