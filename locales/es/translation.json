@@ -13,6 +13,7 @@
     "reset_password": "Para restablecer tu contraseña, volverás a iniciar sesión.", 
     "reset_password_info": "Ingresa tu documento de identidad y seleciona la opción 'Olvidé la contraseña'.",
     "button_submit": "Continuar",
-    "button_cancel": "Cancelar"
+    "button_cancel": "Cancelar", 
+    "message_banner": "Solo te falta 1 misión, ¡aún estás a tiempo!"
 
 }

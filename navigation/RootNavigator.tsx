@@ -7,7 +7,7 @@ type RootNavigatorProps = {
 }
 
 const RootNavigator = ({ theme }: RootNavigatorProps) => {
-    const Navigation = createStaticNavigation(true ? AuthStack : AppStack)
+    const Navigation = createStaticNavigation(false ? AuthStack : AppStack)
     return <Navigation theme={theme} />
 }
 

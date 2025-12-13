@@ -13,5 +13,6 @@
     "reset_password": "To reset your password, you will need to log in again.", 
     "reset_password_info": "Enter your identity document and select the 'I forgot my password' option.",
     "button_submit": "Continue",
-    "button_cancel": "Cancel"
+    "button_cancel": "Cancel", 
+    "message_banner": "You only have 1 mission left, you're still on time!"
 }

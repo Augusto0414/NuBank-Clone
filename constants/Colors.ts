@@ -4,5 +4,6 @@ export const COLORS = {
     DARK_BUTON_LOGIN: "#FFFFFF", 
     GRAY_COLOR: "#B2BBC6",
     LIGHT_GRAY: "#D9D9D9", 
-    GRAY_ARROW_COLOR:"#565563"
+    GRAY_ARROW_COLOR:"#565563", 
+    LIGHT_WHITHE: "rgba(255, 255, 255, 0.2)"
 }

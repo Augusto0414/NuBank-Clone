@@ -13,9 +13,9 @@ const EYE_OFF_ICON = require('../../assets/img/eyes_close.jpg');
 
 const {GRAY_COLOR, BACKGROUND_COLOR, LIGHT_GRAY, GRAY_ARROW_COLOR} = COLORS; 
 const PasswordView = () => {
-  const {t} = useTranslation();
-  const insets = useSafeAreaInsets(); 
-  const navigate = useNavigation();
+const {t} = useTranslation();
+const insets = useSafeAreaInsets(); 
+const navigate = useNavigation();
 const [isActiveBottomSheet, setIsActiveBottomSheet] = useState<boolean>(false);
 const [isPasswordVisisible, setIsPasswordVisisible] = useState<boolean>(false);
 const handleOpenBottomSheet = () => setIsActiveBottomSheet((prev) => !prev);
