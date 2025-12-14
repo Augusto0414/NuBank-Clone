@@ -1,12 +1,17 @@
+import { CircleButton } from 'components/CircleButton';
 import { COLORS } from 'constants/Colors';
+import { formatMoney } from 'helpers/formarMonet';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-const { BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, LIGHT_WHITHE } = COLORS;
+import { createHomeActions } from './home.action';
+const { BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, LIGHT_WHITHE, GRAY_ARROW_COLOR } = COLORS;
 const Home = () => {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
+  const actions = createHomeActions();
+
   return (
     <View style={{ flex: 1, paddingBottom: insets.bottom }}>
       <View style={styles.headContainer}>
@@ -37,6 +42,35 @@ const Home = () => {
             style={styles.iconRight}
           />
         </View>
+      </View>
+      <View style={styles.buttonAccount}>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+          onPress={() => {}}>
+          <View>
+            <Text style={styles.textButtonAccount}>{t('Savings account')}</Text>
+            <Text style={styles.textButtonAccount}>{`${formatMoney(10000)}`}</Text>
+          </View>
+          <View>
+            <Ionicons
+              name="chevron-forward"
+              size={22}
+              color={GRAY_ARROW_COLOR}
+              style={styles.iconRight}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        {actions.map(({ key, icon, titleKey, bannerKey, onPress }) => (
+          <CircleButton
+            key={key}
+            icon={icon}
+            title={t(titleKey)}
+            bannerTitle={bannerKey ? t(bannerKey) : undefined}
+            onclick={onPress}
+          />
+        ))}
       </View>
     </View>
   );
@@ -109,6 +143,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 50,
     right: 100,
+  },
+  buttonAccount: {
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  textButtonAccount: {
+    textAlign: 'justify',
+    fontWeight: '600',
+    fontSize: 18,
   },
 });
 export default Home;
