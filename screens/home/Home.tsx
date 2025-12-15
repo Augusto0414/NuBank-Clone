@@ -1,3 +1,4 @@
+import { Button } from 'components/Button';
 import { CircleButton } from 'components/CircleButton';
 import { COLORS } from 'constants/Colors';
 import { formatMoney } from 'helpers/formarMonet';
@@ -5,12 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { createHomeActions } from './home.action';
+import { createButtonActions, createHomeActions } from './actions';
 const { BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, LIGHT_WHITHE, GRAY_ARROW_COLOR } = COLORS;
 const Home = () => {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const actions = createHomeActions();
+  const buttonAction = createButtonActions();
 
   return (
     <View style={{ flex: 1, paddingBottom: insets.bottom }}>
@@ -61,15 +63,28 @@ const Home = () => {
           </View>
         </TouchableOpacity>
       </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingTop: 7,
+        }}>
         {actions.map(({ key, icon, titleKey, bannerKey, onPress }) => (
-          <CircleButton
-            key={key}
-            icon={icon}
-            title={t(titleKey)}
-            bannerTitle={bannerKey ? t(bannerKey) : undefined}
-            onclick={onPress}
-          />
+          <View key={key} style={{ alignItems: 'center', flex: 1, paddingHorizontal: 20 }}>
+            <CircleButton
+              icon={icon}
+              title={t(titleKey)}
+              bannerTitle={bannerKey ? t(bannerKey) : undefined}
+              onclick={onPress}
+            />
+          </View>
+        ))}
+      </View>
+      <View>
+        {buttonAction.map(({ key, title, iconName, onPress }) => (
+          <View key={key} style={{ marginTop: 20, paddingHorizontal: 20 }}>
+            <Button title={t(title)} iconName={iconName} onPress={onPress} />
+          </View>
         ))}
       </View>
     </View>
