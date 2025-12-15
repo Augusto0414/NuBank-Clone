@@ -2,34 +2,98 @@ import { Button } from 'components/Button';
 import { CircleButton } from 'components/CircleButton';
 import { COLORS } from 'constants/Colors';
 import { formatMoney } from 'helpers/formarMonet';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createButtonActions, createHomeActions } from './actions';
-const { BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, LIGHT_WHITHE, GRAY_ARROW_COLOR } = COLORS;
+
+const { BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, LIGHT_WHITHE, GRAY_ARROW_COLOR, GRAY_COLOR } =
+  COLORS;
+
+const HEADER_MAX_HEIGHT = 230;
+const HEADER_MIN_HEIGHT = 130;
+
 const Home = () => {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const actions = createHomeActions();
-  const buttonAction = createButtonActions();
+
+  const circleButtonActions = createHomeActions();
+  const buttonActions = createButtonActions();
+
+  const scrollY = useRef(new Animated.Value(0)).current;
+
+  const headerHeight = scrollY.interpolate({
+    inputRange: [0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT],
+    outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+    extrapolate: 'clamp',
+  });
+
+  const iconsOpacity = scrollY.interpolate({
+    inputRange: [0, 40],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
+
+  const iconsTranslateY = scrollY.interpolate({
+    inputRange: [0, 40],
+    outputRange: [0, -20],
+    extrapolate: 'clamp',
+  });
+
+  const bannerScale = scrollY.interpolate({
+    inputRange: [0, 60],
+    outputRange: [1, 0.9],
+    extrapolate: 'clamp',
+  });
+
+  const bannerHeight = scrollY.interpolate({
+    inputRange: [0, 60],
+    outputRange: [60, 45],
+    extrapolate: 'clamp',
+  });
+
+  const bannerTop = scrollY.interpolate({
+    inputRange: [0, 60],
+    outputRange: [120, 70],
+    extrapolate: 'clamp',
+  });
 
   return (
     <View style={{ flex: 1, paddingBottom: insets.bottom }}>
-      <View style={styles.headContainer}>
-        <TouchableOpacity style={styles.buttomUser} activeOpacity={0.7} onPress={() => {}}>
-          <Ionicons name="person-outline" size={20} color={DARK_BUTON_TEXT_COLOR} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttomAddUser} activeOpacity={0.7} onPress={() => {}}>
-          <Ionicons name="person-add-outline" size={20} color={DARK_BUTON_TEXT_COLOR} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.helpButton} activeOpacity={0.7} onPress={() => {}}>
-          <Ionicons name="help" size={20} color={DARK_BUTON_TEXT_COLOR} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.eyeButton} activeOpacity={0.7} onPress={() => {}}>
-          <Ionicons name="eye-outline" size={20} color={DARK_BUTON_TEXT_COLOR} />
-        </TouchableOpacity>
-        <View style={styles.infoHeaderText}>
+      <Animated.View style={[styles.headContainer, { height: headerHeight }]}>
+        <Animated.View
+          style={{
+            opacity: iconsOpacity,
+            transform: [{ translateY: iconsTranslateY }],
+          }}>
+          <TouchableOpacity style={styles.buttomUser}>
+            <Ionicons name="person-outline" size={20} color={DARK_BUTON_TEXT_COLOR} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.eyeButton}>
+            <Ionicons name="eye-outline" size={20} color={DARK_BUTON_TEXT_COLOR} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.helpButton}>
+            <Ionicons name="help" size={20} color={DARK_BUTON_TEXT_COLOR} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.buttomAddUser}>
+            <Ionicons name="person-add-outline" size={20} color={DARK_BUTON_TEXT_COLOR} />
+          </TouchableOpacity>
+        </Animated.View>
+
+        <Animated.View
+          style={[
+            styles.infoHeaderText,
+            {
+              height: bannerHeight,
+              top: bannerTop,
+              transform: [{ scale: bannerScale }],
+            },
+          ]}>
           <Ionicons
             name="information-circle-outline"
             size={22}
@@ -43,75 +107,72 @@ const Home = () => {
             color={BACKGROUND_COLOR}
             style={styles.iconRight}
           />
+        </Animated.View>
+      </Animated.View>
+
+      <Animated.ScrollView
+        contentContainerStyle={{
+          paddingTop: HEADER_MAX_HEIGHT,
+          paddingBottom: 30,
+        }}
+        scrollEventThrottle={16}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          useNativeDriver: false,
+        })}>
+        <View style={styles.buttonAccount}>
+          <TouchableOpacity style={styles.accountRow}>
+            <View>
+              <Text style={styles.textButtonAccount}>{t('Savings account')}</Text>
+              <Text style={styles.textButtonAccount}>{formatMoney(10000)}</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={22} color={GRAY_ARROW_COLOR} />
+          </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.buttonAccount}>
-        <TouchableOpacity
-          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
-          onPress={() => {}}>
-          <View>
-            <Text style={styles.textButtonAccount}>{t('Savings account')}</Text>
-            <Text style={styles.textButtonAccount}>{`${formatMoney(10000)}`}</Text>
-          </View>
-          <View>
-            <Ionicons
-              name="chevron-forward"
-              size={22}
-              color={GRAY_ARROW_COLOR}
-              style={styles.iconRight}
-            />
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingTop: 7,
-        }}>
-        {actions.map(({ key, icon, titleKey, bannerKey, onPress }) => (
-          <View key={key} style={{ alignItems: 'center', flex: 1, paddingHorizontal: 20 }}>
-            <CircleButton
-              icon={icon}
-              title={t(titleKey)}
-              bannerTitle={bannerKey ? t(bannerKey) : undefined}
-              onclick={onPress}
-            />
-          </View>
-        ))}
-      </View>
-      <View>
-        {buttonAction.map(({ key, title, iconName, onPress }) => (
-          <View key={key} style={{ marginTop: 20, paddingHorizontal: 20 }}>
+
+        <View style={styles.actionsRow}>
+          {circleButtonActions.map(({ key, icon, titleKey, bannerKey, onPress }) => (
+            <View key={key} style={styles.circleWrapper}>
+              <CircleButton
+                icon={icon}
+                title={t(titleKey)}
+                bannerTitle={bannerKey ? t(bannerKey) : undefined}
+                onclick={onPress}
+              />
+            </View>
+          ))}
+        </View>
+
+        {buttonActions.map(({ key, title, iconName, onPress }) => (
+          <View key={key} style={styles.buttonWrapper}>
             <Button title={t(title)} iconName={iconName} onPress={onPress} />
           </View>
         ))}
-      </View>
+        <View style={styles.discoverContent}>
+          <Text style={styles.textDiscover}>{t('discover_more')}</Text>
+        </View>
+      </Animated.ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   headContainer: {
-    width: '100%',
-    height: '30%',
-    flexDirection: 'row',
-    paddingHorizontal: 20,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
     backgroundColor: BACKGROUND_COLOR,
   },
+
   infoHeaderText: {
-    width: '100%',
-    height: 60,
     backgroundColor: DARK_BUTON_TEXT_COLOR,
-    marginTop: 20,
+    borderRadius: 20,
     position: 'absolute',
     left: 20,
     right: 20,
-    top: 110,
-    borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 20,
   },
 
@@ -120,7 +181,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     flex: 1,
-    textAlign: 'justify',
   },
 
   iconLeft: {
@@ -130,14 +190,16 @@ const styles = StyleSheet.create({
   iconRight: {
     marginLeft: 10,
   },
+
   buttomUser: {
     padding: 15,
     borderRadius: 50,
     backgroundColor: LIGHT_WHITHE,
     position: 'absolute',
-    top: 53,
+    top: 50,
     left: 20,
   },
+
   buttomAddUser: {
     padding: 15,
     borderRadius: 50,
@@ -145,6 +207,7 @@ const styles = StyleSheet.create({
     top: 50,
     right: 20,
   },
+
   helpButton: {
     padding: 15,
     borderRadius: 50,
@@ -152,6 +215,7 @@ const styles = StyleSheet.create({
     top: 50,
     right: 60,
   },
+
   eyeButton: {
     padding: 15,
     borderRadius: 50,
@@ -159,14 +223,52 @@ const styles = StyleSheet.create({
     top: 50,
     right: 100,
   },
+
   buttonAccount: {
     paddingHorizontal: 20,
     marginTop: 20,
   },
+
+  accountRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
   textButtonAccount: {
-    textAlign: 'justify',
     fontWeight: '600',
     fontSize: 18,
   },
+
+  actionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+
+  circleWrapper: {
+    flex: 1,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+
+  buttonWrapper: {
+    marginTop: 20,
+    paddingHorizontal: 20,
+  },
+
+  discoverContent: {
+    borderTopColor: GRAY_COLOR,
+    borderTopWidth: 1,
+    marginTop: 30,
+    marginHorizontal: 20,
+  },
+
+  textDiscover: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 10,
+  },
 });
+
 export default Home;
