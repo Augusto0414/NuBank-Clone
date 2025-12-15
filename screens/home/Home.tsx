@@ -14,8 +14,8 @@ const BreB = require('../../assets/img/Bre-B.png');
 const { BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, LIGHT_WHITHE, GRAY_ARROW_COLOR, GRAY_COLOR } =
   COLORS;
 
-const HEADER_MAX_HEIGHT = 230;
-const HEADER_MIN_HEIGHT = 130;
+const HEADER_MAX_HEIGHT = 200;
+const HEADER_MIN_HEIGHT = 45;
 
 const Home = () => {
   const insets = useSafeAreaInsets();
@@ -62,6 +62,12 @@ const Home = () => {
     extrapolate: 'clamp',
   });
 
+  const bannerOpacity = scrollY.interpolate({
+    inputRange: [0, 50, 80],
+    outputRange: [1, 0.5, 0],
+    extrapolate: 'clamp',
+  });
+
   return (
     <View style={{ flex: 1, paddingBottom: insets.bottom }}>
       <Animated.View style={[styles.headContainer, { height: headerHeight }]}>
@@ -88,11 +94,13 @@ const Home = () => {
         </Animated.View>
 
         <Animated.View
+          pointerEvents="none"
           style={[
             styles.infoHeaderText,
             {
               height: bannerHeight,
               top: bannerTop,
+              opacity: bannerOpacity,
               transform: [{ scale: bannerScale }],
             },
           ]}>
