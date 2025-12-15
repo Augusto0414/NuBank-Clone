@@ -1,14 +1,16 @@
 import { Button } from 'components/Button';
+import { CardInfo } from 'components/CardInfo';
 import { CircleButton } from 'components/CircleButton';
 import { COLORS } from 'constants/Colors';
 import { formatMoney } from 'helpers/formarMonet';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createButtonActions, createHomeActions } from './actions';
-
+const BreB = require('../../assets/img/Bre-B.png');
 const { BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, LIGHT_WHITHE, GRAY_ARROW_COLOR, GRAY_COLOR } =
   COLORS;
 
@@ -147,8 +149,32 @@ const Home = () => {
             <Button title={t(title)} iconName={iconName} onPress={onPress} />
           </View>
         ))}
-        <View style={styles.discoverContent}>
-          <Text style={styles.textDiscover}>{t('discover_more')}</Text>
+        <View style={[styles.discoverContent, { marginHorizontal: 20 }]} />
+        <View>
+          <Text style={[styles.textDiscover, { marginHorizontal: 20 }]}>{t('discover_more')}</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingVertical: 15,
+              gap: 15,
+              paddingHorizontal: 14,
+            }}>
+            <CardInfo
+              source={BreB}
+              title="Envía dinero"
+              content="Envía dinero fácil y rápido desde tu cuenta."
+              button
+              onPressLink={() => console.log('Link pressed')}
+            />
+            <CardInfo
+              source={BreB}
+              title="Envía dinero"
+              content="Envía dinero fácil y rápido desde tu cuenta."
+              link
+              onPressLink={() => console.log('Link pressed')}
+            />
+          </ScrollView>
         </View>
       </Animated.ScrollView>
     </View>
@@ -261,7 +287,6 @@ const styles = StyleSheet.create({
     borderTopColor: GRAY_COLOR,
     borderTopWidth: 1,
     marginTop: 30,
-    marginHorizontal: 20,
   },
 
   textDiscover: {
