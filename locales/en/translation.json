@@ -24,5 +24,12 @@
     "new": "New",
     "detail_account": "Account details",
     "my_cards": "My cards",
-    "discover_more": "Discover more"
+    "discover_more": "Discover more",
+    "send_title": "¿How would you like to send this?",
+    "institution_key": "Other financial institutions with keys",
+    "institutions": "Other financial institutions",
+    "client_nu": "Nu Clients",
+    "subtitile_send": "It's immediate and free",
+    "subtitle_send_entity": "It may take 2 days.",
+    "You_can_do_it_at": "You can do it at"
 }

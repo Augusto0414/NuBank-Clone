@@ -24,5 +24,12 @@
     "new": "Nuevo",
     "detail_account": "Detalles de la cuenta",
     "my_cards": "Mis tarjetas",
-    "discover_more": "Descubrir más"
+    "discover_more": "Descubrir más",
+    "send_title": "¿Cómo quieres hacer el envío? ",
+    "institution_key": "Otras entidades financieras con llaves",
+    "institutions": "Otras entidades financieras",
+    "client_nu": "Clientes Nu",
+    "subtitile_send": "Es inmediata y gratis",
+    "subtitle_send_entity": "Puede demorar 2 días.",
+    "You_can_do_it_at": "Puedes hacerlo a"
 }

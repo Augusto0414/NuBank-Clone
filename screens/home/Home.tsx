@@ -9,7 +9,7 @@ import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { createButtonActions, createHomeActions } from './actions';
+import { useActionButtons, useCircleActionButtons } from './hooks';
 const BreB = require('../../assets/img/Bre-B.png');
 const { BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, LIGHT_WHITHE, GRAY_ARROW_COLOR, GRAY_COLOR } =
   COLORS;
@@ -21,8 +21,8 @@ const Home = () => {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
 
-  const circleButtonActions = createHomeActions();
-  const buttonActions = createButtonActions();
+  const circleButtonActions = useCircleActionButtons();
+  const buttonActions = useActionButtons();
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
