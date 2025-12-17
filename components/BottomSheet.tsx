@@ -1,6 +1,6 @@
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface HandleBottomSheetProps {
@@ -45,7 +45,7 @@ export const HandleBottomSheet = ({ isVisible, children, onClose }: HandleBottom
             activeOpacity={0.7}>
             <Ionicons name="close" size={26} color="#000" />
           </TouchableOpacity>
-          <View>{children}</View>
+          <View>{typeof children === 'string' ? <Text>{children}</Text> : children}</View>
         </View>
       </BottomSheetView>
     </BottomSheet>

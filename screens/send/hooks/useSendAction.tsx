@@ -26,7 +26,9 @@ export const useSendAction = (): SendActionProps[] => {
       subtitle: i18n.t('subtitile_send'),
       iconLeft: 'flash-outline',
       iconRight: 'chevron-forward',
-      onPress: () => {},
+      onPress: () => {
+        route.navigate('PlateView' as never);
+      },
     },
     {
       title: i18n.t('institutions'),

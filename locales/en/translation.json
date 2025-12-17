@@ -31,5 +31,8 @@
     "client_nu": "Nu Clients",
     "subtitile_send": "It's immediate and free",
     "subtitle_send_entity": "It may take 2 days.",
-    "You_can_do_it_at": "You can do it at"
+    "You_can_do_it_at": "You can do it at",
+    "send_new": "Send to a new one",
+    "plate_nu": "Nu Plate",
+    "digit_nu_plate": "Enter a Nu Plate"
 }

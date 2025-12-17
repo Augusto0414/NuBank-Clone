@@ -31,5 +31,8 @@
     "client_nu": "Clientes Nu",
     "subtitile_send": "Es inmediata y gratis",
     "subtitle_send_entity": "Puede demorar 2 días.",
-    "You_can_do_it_at": "Puedes hacerlo a"
+    "You_can_do_it_at": "Puedes hacerlo a",
+    "send_new": "Evía a una nueva",
+    "plate_nu": "Placa Nu",
+    "digit_nu_plate": "Ingrese una Nu Placa"
 }
