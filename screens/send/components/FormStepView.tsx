@@ -6,8 +6,14 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const { GRAY_ARROW_COLOR, BACKGROUND_COLOR, DARK_BLACK, GRAY_COLOR, DARK_BUTON_TEXT_COLOR } =
-  COLORS;
+const {
+  GRAY_ARROW_COLOR,
+  BACKGROUND_COLOR,
+  DARK_BLACK,
+  GRAY_COLOR,
+  DARK_BUTON_TEXT_COLOR,
+  BACKGROUND_SECUNDARY,
+} = COLORS;
 
 interface FormStepViewProps {
   titlePrimary: string;
@@ -20,6 +26,7 @@ interface FormStepViewProps {
   skipButton?: boolean;
   buttonText?: string;
   textInput?: string;
+  userIcon?: string;
   onSubmit: (value: string) => void;
 }
 
@@ -35,6 +42,7 @@ export const FormStepView = ({
   skipButton = false,
   onSubmit,
   buttonText,
+  userIcon,
 }: FormStepViewProps) => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
@@ -63,6 +71,15 @@ export const FormStepView = ({
 
       {/* Subtitle */}
       <Text style={styles.subtitleNu}>{subtitle}</Text>
+      {userIcon && (
+        <View style={styles.userIconContent}>
+          {' '}
+          <View style={styles.userIcon}>
+            <Text style={styles.userIconText}>{userIcon.slice(0, 2).toUpperCase()}</Text>
+          </View>
+          <Text style={styles.userText}>{userIcon}</Text>
+        </View>
+      )}
 
       {/* Input */}
       {keyboardType === 'numeric' ? (
@@ -128,8 +145,7 @@ const styles = StyleSheet.create({
     color: GRAY_COLOR,
     fontSize: 16,
     marginTop: 10,
-    borderTopColor: GRAY_COLOR,
-    borderTopWidth: 1,
+
     paddingTop: 10,
   },
   textNu: { color: BACKGROUND_COLOR },
@@ -178,5 +194,32 @@ const styles = StyleSheet.create({
   },
   textBtnSend: {
     color: DARK_BUTON_TEXT_COLOR,
+  },
+  userIconContent: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
+    marginVertical: 20,
+    borderBottomColor: GRAY_COLOR,
+    borderBottomWidth: 1,
+    paddingBottom: 25,
+  },
+  userIcon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: BACKGROUND_SECUNDARY,
+    borderRadius: 50,
+    width: 60,
+    height: 60,
+    borderColor: BACKGROUND_COLOR,
+    borderWidth: 1,
+  },
+  userIconText: {
+    color: BACKGROUND_COLOR,
+    fontWeight: 'bold',
+  },
+  userText: {
+    color: DARK_BLACK,
+    fontWeight: '500',
   },
 });
