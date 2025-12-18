@@ -8,4 +8,5 @@ export const COLORS = {
   LIGHT_WHITHE: 'rgba(255, 255, 255, 0.2)',
   DARK_BLACK: '#000000',
   BACKGROUND_SECUNDARY: '#F5ECFF',
+  WHITE: '#FFFFFF',
 };

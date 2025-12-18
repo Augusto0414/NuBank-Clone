@@ -40,5 +40,11 @@
     "current_money": "Your current money is {{amount}}",
     "confirm_amount": "Ready! You are going to send {{amount}}",
     "confirm_send_button": "Confirm",
-    "what_is_reason": "¿Cuál es el motivo? (opcional)"
+    "what_is_reason": "¿Cuál es el motivo? (opcional)",
+    "continue_your_application": "Continue your application",
+    "using_email_and_phone": "using the same email and phone number.",
+    "your_application": "Here you can also start your application",
+    "write_email": "Write your email",
+    "confirm_email": "Confirm your email",
+    "phone_number_placeholder": "Phone number"
 }

@@ -129,9 +129,7 @@ export const FormStepView = ({
           />
         </View>
       ) : (
-        <TouchableOpacity
-          style={styles.btnSend}
-          onPress={() => !isInvalid && value.trim() && onSubmit(value)}>
+        <TouchableOpacity style={styles.btnSend} onPress={() => onSubmit(value)}>
           <Text style={styles.textBtnSend}>{buttonText}</Text>
         </TouchableOpacity>
       )}
