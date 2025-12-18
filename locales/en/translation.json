@@ -34,5 +34,11 @@
     "You_can_do_it_at": "You can do it at",
     "send_new": "Send to a new one",
     "plate_nu": "Nu Plate",
-    "digit_nu_plate": "Enter a Nu Plate"
+    "digit_nu_plate": "Enter a Nu Plate",
+    "invalid_nu_plate": "Invalid Nu Plate. It must be between 1 and 5 characters.",
+    "send_amount": "How much do you want to send?",
+    "current_money": "Your current money is {{amount}}",
+    "confirm_amount": "Ready! You are going to send {{amount}}",
+    "confirm_send_button": "Confirm",
+    "what_is_reason": "¿Cuál es el motivo? (opcional)"
 }

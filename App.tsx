@@ -2,11 +2,12 @@ import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { useMemo } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-gesture-handler';
-import "./global.css";
-import "./i18n";
+import './global.css';
+import './i18n';
 
-import RootNavigator from "navigation/RootNavigator";
+import RootNavigator from 'navigation/RootNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SendMoneyProvider } from 'screens/send/hooks/SendContext';
 
 export default function App() {
   const colorScheme = useColorScheme();
@@ -14,7 +15,9 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <RootNavigator theme={theme} />
+      <SendMoneyProvider>
+        <RootNavigator theme={theme} />
+      </SendMoneyProvider>
     </SafeAreaProvider>
-  )
+  );
 }

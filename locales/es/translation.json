@@ -34,5 +34,11 @@
     "You_can_do_it_at": "Puedes hacerlo a",
     "send_new": "Evía a una nueva",
     "plate_nu": "Placa Nu",
-    "digit_nu_plate": "Ingrese una Nu Placa"
+    "digit_nu_plate": "Ingrese una Nu Placa",
+    "invalid_nu_plate": "Nu Placa inválida. Debe tener entre 1 y 5 caracteres.",
+    "send_amount": "¿Cuánto quieres enviar?",
+    "current_money": "Tu dinero actual es {{amount}}",
+    "confirm_amount": "¡Listo! Vas a enviar {{amount}}",
+    "confirm_send_button": "Confirmar",
+    "what_is_reason": "¿Cuál es el motivo? (opcional)"
 }
