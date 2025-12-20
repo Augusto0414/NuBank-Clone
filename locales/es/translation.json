@@ -46,5 +46,12 @@
     "your_application": "Aquí también puedes iniciar tu solicitud",
     "write_email": "Escribe tu correo electrónico",
     "confirm_email": "Confirma tu correo electrónico",
-    "phone_number_placeholder": "Número de teléfono"
+    "phone_number_placeholder": "Número de teléfono",
+    "email_invalid": "Correo inválido",
+    "email_required": "El correo es obligatorio",
+    "confirm_email_mismatch": "Los correos no coinciden",
+    "confirm_email_required": "La confirmación de correo es obligatoria",
+    "phone_invalid": "Debe tener 10 dígitos",
+    "phone_required": "El teléfono es obligatorio",
+    "continue": "Continuar"
 }

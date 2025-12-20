@@ -46,5 +46,12 @@
     "your_application": "Here you can also start your application",
     "write_email": "Write your email",
     "confirm_email": "Confirm your email",
-    "phone_number_placeholder": "Phone number"
+    "phone_number_placeholder": "Phone number",
+    "email_invalid": "Invalid email",
+    "email_required": "Email is required",
+    "confirm_email_mismatch": "Emails do not match",
+    "confirm_email_required": "Email confirmation is required",
+    "phone_invalid": "Must be 10 digits",
+    "phone_required": "Phone number is required",
+    "continue": "Continue"
 }
