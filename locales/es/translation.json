@@ -53,5 +53,6 @@
     "confirm_email_required": "La confirmación de correo es obligatoria",
     "phone_invalid": "Debe tener 10 dígitos",
     "phone_required": "El teléfono es obligatorio",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "search_country": "Buscar país"
 }

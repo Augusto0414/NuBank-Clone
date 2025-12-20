@@ -89,6 +89,9 @@ const WelComeView = () => {
               borderBottomColor: GRAY_COLOR,
               backgroundColor: 'transparent',
             }}
+            filterProps={{
+              placeholder: t('search_country'),
+            }}
             placeholder={t('phone_number_placeholder')}
             textContainerStyle={{ paddingVertical: 0, backgroundColor: 'transparent' }}
             textInputStyle={{ color: DARK_BLACK, fontSize: 16 }}
@@ -99,7 +102,10 @@ const WelComeView = () => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={() => formik.handleSubmit()}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => formik.handleSubmit()}
+        activeOpacity={0.7}>
         <Text style={{ color: WHITE, fontWeight: '400', fontSize: 14 }}>{t('continue')}</Text>
       </TouchableOpacity>
     </View>

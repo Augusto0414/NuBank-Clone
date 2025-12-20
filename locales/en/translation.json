@@ -53,5 +53,6 @@
     "confirm_email_required": "Email confirmation is required",
     "phone_invalid": "Must be 10 digits",
     "phone_required": "Phone number is required",
-    "continue": "Continue"
+    "continue": "Continue",
+    "search_country": "Search country"
 }
