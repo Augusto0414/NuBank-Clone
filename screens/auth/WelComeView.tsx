@@ -2,18 +2,30 @@ import { COLORS } from 'constants/Colors';
 import { useFormik } from 'formik';
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Yup from 'yup';
 
 const { BACKGROUND_COLOR, DARK_BLACK, GRAY_COLOR, WHITE } = COLORS;
+
 const WelComeView = () => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const phoneInput = useRef(null);
 
   const validationSchema = Yup.object({
+    name: Yup.string().min(2, t('name_invalid')).required(t('name_required')),
+    lastName: Yup.string().min(2, t('last_name_invalid')).required(t('last_name_required')),
     email: Yup.string().email(t('email_invalid')).required(t('email_required')),
     confirmEmail: Yup.string()
       .oneOf([Yup.ref('email')], t('confirm_email_mismatch'))
@@ -25,9 +37,11 @@ const WelComeView = () => {
 
   const formik = useFormik({
     initialValues: {
+      name: '',
+      lastName: '',
       email: '',
       confirmEmail: '',
-      phoneNumber: '',
+      phone: '',
     },
     validationSchema,
     onSubmit: (values) => {
@@ -35,80 +49,132 @@ const WelComeView = () => {
     },
   });
 
-  const { email, confirmEmail, phoneNumber } = formik.values;
+  const { name, lastName, email, confirmEmail, phone } = formik.values;
+
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingTop: insets.top,
-        paddingBottom: insets.bottom,
-        marginHorizontal: 20,
-      }}>
-      <Text style={styles.textContent}>
-        <Text style={styles.primaryTitle}>
-          {t('continue_your_application')} {''}
-        </Text>
-        <Text style={styles.secundaryText}>{t('using_email_and_phone')}</Text>
-      </Text>
-      <Text style={styles.subtitle}>{t('your_application')}</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            flex: 1,
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            marginHorizontal: 20,
+          }}>
+          <Text style={styles.textContent}>
+            <Text style={styles.primaryTitle}>
+              {t('continue_your_application')} {''}
+            </Text>
+            <Text style={styles.secundaryText}>{t('using_email_and_phone')}</Text>
+          </Text>
+          <Text style={styles.subtitle}>{t('your_application')}</Text>
 
-      <View style={{ flex: 1 }}>
-        <View style={styles.inputEmailContainer}>
-          <Text style={styles.inputText}>{t('write_email')}</Text>
-          <TextInput
-            style={{ fontSize: 16, color: DARK_BLACK }}
-            keyboardType="email-address"
-            cursorColor={BACKGROUND_COLOR}
-            value={email}
-            onChangeText={formik.handleChange('email')}
-            onBlur={formik.handleBlur('email')}
-          />
-        </View>
-        <View style={[styles.inputEmailContainer, { marginTop: 30 }]}>
-          <Text style={styles.inputText}>{t('confirm_email')}</Text>
-          <TextInput
-            style={{ fontSize: 16, color: DARK_BLACK }}
-            keyboardType="email-address"
-            cursorColor={BACKGROUND_COLOR}
-            value={confirmEmail}
-            onChangeText={formik.handleChange('confirmEmail')}
-            onBlur={formik.handleBlur('confirmEmail')}
-          />
-        </View>
+          <View style={styles.inputEmailContainer}>
+            <Text style={styles.inputText}>{t('name')}</Text>
+            <TextInput
+              style={{ fontSize: 16, color: DARK_BLACK }}
+              keyboardType="default"
+              cursorColor={BACKGROUND_COLOR}
+              value={name}
+              onChangeText={formik.handleChange('name')}
+              onBlur={formik.handleBlur('name')}
+            />
+          </View>
+          {formik.touched.name && formik.errors.name && (
+            <Text style={styles.errorText}>{formik.errors.name}</Text>
+          )}
 
-        <View style={{ marginTop: 30 }}>
-          <PhoneInput
-            ref={phoneInput}
-            value={phoneNumber}
-            defaultCode="CO"
-            layout="first"
-            containerStyle={{
-              width: '100%',
-              marginTop: 30,
-              borderBottomWidth: 1,
-              borderBottomColor: GRAY_COLOR,
-              backgroundColor: 'transparent',
-            }}
-            filterProps={{
-              placeholder: t('search_country'),
-            }}
-            placeholder={t('phone_number_placeholder')}
-            textContainerStyle={{ paddingVertical: 0, backgroundColor: 'transparent' }}
-            textInputStyle={{ color: DARK_BLACK, fontSize: 16 }}
-            onChangeFormattedText={(text) => {
-              formik.setFieldValue('phone', text);
-            }}
-          />
-        </View>
-      </View>
+          <View style={styles.inputEmailContainer}>
+            <Text style={styles.inputText}>{t('last_name')}</Text>
+            <TextInput
+              style={{ fontSize: 16, color: DARK_BLACK }}
+              keyboardType="default"
+              cursorColor={BACKGROUND_COLOR}
+              value={lastName}
+              onChangeText={formik.handleChange('lastName')}
+              onBlur={formik.handleBlur('lastName')}
+            />
+          </View>
+          {formik.touched.lastName && formik.errors.lastName && (
+            <Text style={styles.errorText}>{formik.errors.lastName}</Text>
+          )}
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => formik.handleSubmit()}
-        activeOpacity={0.7}>
-        <Text style={{ color: WHITE, fontWeight: '400', fontSize: 14 }}>{t('continue')}</Text>
-      </TouchableOpacity>
-    </View>
+          <View style={[styles.inputEmailContainer, { marginTop: 30 }]}>
+            <Text style={styles.inputText}>{t('write_email')}</Text>
+            <TextInput
+              style={{ fontSize: 16, color: DARK_BLACK }}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              cursorColor={BACKGROUND_COLOR}
+              value={email}
+              onChangeText={formik.handleChange('email')}
+              onBlur={formik.handleBlur('email')}
+            />
+          </View>
+          {formik.touched.email && formik.errors.email && (
+            <Text style={styles.errorText}>{formik.errors.email}</Text>
+          )}
+
+          <View style={[styles.inputEmailContainer, { marginTop: 30 }]}>
+            <Text style={styles.inputText}>{t('confirm_email')}</Text>
+            <TextInput
+              style={{ fontSize: 16, color: DARK_BLACK }}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              cursorColor={BACKGROUND_COLOR}
+              value={confirmEmail}
+              onChangeText={formik.handleChange('confirmEmail')}
+              onBlur={formik.handleBlur('confirmEmail')}
+            />
+          </View>
+          {formik.touched.confirmEmail && formik.errors.confirmEmail && (
+            <Text style={styles.errorText}>{formik.errors.confirmEmail}</Text>
+          )}
+
+          <View style={{ marginTop: 30 }}>
+            <PhoneInput
+              ref={phoneInput}
+              value={phone}
+              defaultCode="CO"
+              layout="first"
+              containerStyle={{
+                width: '100%',
+                borderBottomWidth: 1,
+                borderBottomColor: GRAY_COLOR,
+                backgroundColor: 'transparent',
+              }}
+              filterProps={{
+                placeholder: t('search_country'),
+              }}
+              placeholder={t('phone_number_placeholder')}
+              textContainerStyle={{ paddingVertical: 0, backgroundColor: 'transparent' }}
+              textInputStyle={{ color: DARK_BLACK, fontSize: 16 }}
+              onChangeFormattedText={(text) => {
+                formik.setFieldValue('phone', text);
+              }}
+            />
+          </View>
+          {formik.touched.phone && formik.errors.phone && (
+            <Text style={styles.errorText}>{formik.errors.phone}</Text>
+          )}
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => formik.handleSubmit()}
+            activeOpacity={0.7}>
+            <Text style={{ color: WHITE, fontWeight: '400', fontSize: 14 }}>{t('continue')}</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -141,13 +207,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: GRAY_COLOR,
   },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
+  },
   button: {
     backgroundColor: BACKGROUND_COLOR,
     alignItems: 'center',
     justifyContent: 'center',
     height: 60,
     borderRadius: 10,
+    marginTop: 30,
     marginBottom: 20,
   },
 });
+
 export default WelComeView;

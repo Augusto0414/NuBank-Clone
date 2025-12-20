@@ -54,5 +54,11 @@
     "phone_invalid": "Debe tener 10 dígitos",
     "phone_required": "El teléfono es obligatorio",
     "continue": "Continuar",
-    "search_country": "Buscar país"
+    "search_country": "Buscar país",
+    "name": "Nombre",
+    "name_required": "El nombre es obligatorio",
+    "name_invalid": "El nombre no puede contener números o caracteres especiales",
+    "last_name": "Apellido",
+    "last_name_required": "El apellido es obligatorio",
+    "last_name_invalid": "El apellido no puede contener números o caracteres especiales"
 }

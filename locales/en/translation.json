@@ -54,5 +54,11 @@
     "phone_invalid": "Must be 10 digits",
     "phone_required": "Phone number is required",
     "continue": "Continue",
-    "search_country": "Search country"
+    "search_country": "Search country",
+    "name": "Name",
+    "name_required": "Name is required",
+    "name_invalid": "Name cannot contain numbers or special characters",
+    "last_name": "Last name",
+    "last_name_required": "Last name is required",
+    "last_name_invalid": "Last name cannot contain numbers or special characters"
 }
