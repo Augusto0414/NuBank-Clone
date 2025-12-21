@@ -1,11 +1,11 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from 'screens/auth/Login';
 import PasswordView from 'screens/auth/PasswordView';
-import Register from 'screens/auth/Register';
-import WelComeView from 'screens/auth/WelComeView';
+import RegisterDetailsView from 'screens/auth/RegisterDetailsView';
+import RegisterProfileView from 'screens/auth/RegisterProfileView';
 
 const AuthStack = createStackNavigator({
-  initialRouteName: 'WelComeView',
+  initialRouteName: 'RegisterProfileView',
   screens: {
     Login: {
       screen: Login,
@@ -13,14 +13,14 @@ const AuthStack = createStackNavigator({
         headerShown: false,
       },
     },
-    Register: {
-      screen: Register,
-      optionns: {
+    RegisterDetailsView: {
+      screen: RegisterDetailsView,
+      options: {
         headerShown: false,
       },
     },
-    WelComeView: {
-      screen: WelComeView,
+    RegisterProfileView: {
+      screen: RegisterProfileView,
       options: { headerShown: false },
     },
     PasswordView: {

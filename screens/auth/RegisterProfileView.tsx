@@ -1,5 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
+import { showToast } from 'components/Toast';
 import { COLORS } from 'constants/Colors';
 import { useFormik } from 'formik';
+import { useRegister } from 'hooks/useRegister';
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -18,10 +21,12 @@ import * as Yup from 'yup';
 
 const { BACKGROUND_COLOR, DARK_BLACK, GRAY_COLOR, WHITE } = COLORS;
 
-const WelComeView = () => {
+const RegisterProfileView = () => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const phoneInput = useRef(null);
+  const { createUser } = useRegister();
+  const navigation = useNavigation();
 
   const validationSchema = Yup.object({
     name: Yup.string().min(2, t('name_invalid')).required(t('name_required')),
@@ -31,7 +36,7 @@ const WelComeView = () => {
       .oneOf([Yup.ref('email')], t('confirm_email_mismatch'))
       .required(t('confirm_email_required')),
     phone: Yup.string()
-      .matches(/^[0-9]{10}$/, t('phone_invalid'))
+      .matches(/^\+?[0-9]{12,15}$/, t('phone_invalid'))
       .required(t('phone_required')),
   });
 
@@ -45,7 +50,21 @@ const WelComeView = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      try {
+        const { phone, email, lastName, name } = values;
+        createUser({
+          name,
+          lastName,
+          email,
+          phoneNumber: phone,
+        });
+        navigation.navigate('RegisterDetailsView' as never);
+      } catch (error: Error | any) {
+        showToast({
+          title: t('error'),
+          message: t('error_creating_user', { error: error.message }),
+        });
+      }
     },
   });
 
@@ -112,6 +131,7 @@ const WelComeView = () => {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+              autoComplete="email"
               cursorColor={BACKGROUND_COLOR}
               value={email}
               onChangeText={formik.handleChange('email')}
@@ -129,6 +149,9 @@ const WelComeView = () => {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+              autoComplete="off"
+              textContentType="none"
+              importantForAutofill="no"
               cursorColor={BACKGROUND_COLOR}
               value={confirmEmail}
               onChangeText={formik.handleChange('confirmEmail')}
@@ -158,7 +181,8 @@ const WelComeView = () => {
               textContainerStyle={{ paddingVertical: 0, backgroundColor: 'transparent' }}
               textInputStyle={{ color: DARK_BLACK, fontSize: 16 }}
               onChangeFormattedText={(text) => {
-                formik.setFieldValue('phone', text);
+                let trimText = text.replace(/\s/g, '');
+                formik.setFieldValue('phone', trimText);
               }}
             />
           </View>
@@ -218,9 +242,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 60,
     borderRadius: 10,
-    marginTop: 30,
+    marginTop: 50,
     marginBottom: 20,
   },
 });
 
-export default WelComeView;
+export default RegisterProfileView;

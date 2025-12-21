@@ -60,5 +60,7 @@
     "name_invalid": "El nombre no puede contener números o caracteres especiales",
     "last_name": "Apellido",
     "last_name_required": "El apellido es obligatorio",
-    "last_name_invalid": "El apellido no puede contener números o caracteres especiales"
+    "last_name_invalid": "El apellido no puede contener números o caracteres especiales",
+    "error_creating_user": "Hubo un error al crear el usuario. Por favor, inténtalo de nuevo. {{error}}",
+    "error": "Error"
 }

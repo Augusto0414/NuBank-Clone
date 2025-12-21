@@ -5,6 +5,7 @@ import 'react-native-gesture-handler';
 import './global.css';
 import './i18n';
 
+import { UseRegisterProvider } from 'context/UseRegister';
 import RootNavigator from 'navigation/RootNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SendMoneyProvider } from 'screens/send/hooks/SendContext';
@@ -15,9 +16,11 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <SendMoneyProvider>
-        <RootNavigator theme={theme} />
-      </SendMoneyProvider>
+      <UseRegisterProvider>
+        <SendMoneyProvider>
+          <RootNavigator theme={theme} />
+        </SendMoneyProvider>
+      </UseRegisterProvider>
     </SafeAreaProvider>
   );
 }

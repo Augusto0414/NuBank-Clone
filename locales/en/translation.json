@@ -60,5 +60,7 @@
     "name_invalid": "Name cannot contain numbers or special characters",
     "last_name": "Last name",
     "last_name_required": "Last name is required",
-    "last_name_invalid": "Last name cannot contain numbers or special characters"
+    "last_name_invalid": "Last name cannot contain numbers or special characters",
+    "error_creating_user": "There was an error creating the user. Please try again. {{error}}",
+    "error": "Error"
 }
