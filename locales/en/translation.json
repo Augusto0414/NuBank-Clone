@@ -62,5 +62,16 @@
     "last_name_required": "Last name is required",
     "last_name_invalid": "Last name cannot contain numbers or special characters",
     "error_creating_user": "There was an error creating the user. Please try again. {{error}}",
-    "error": "Error"
+    "error": "Error",
+    "document_number": "Document number",
+    "document_number_required": "Document number is required",
+    "registration_almost_complete_text": "Almost finished",
+    "registration_almost_complete_suffix": "with your registration",
+    "finish_registration_text": "Finish your registration",
+    "finish_registration_suffix": "to start using our services",
+    "password_input_placeholder": "Enter your password",
+    "password_input_error": "Password must be at least 8 characters",
+    "password_input_label": "Password",
+    "confirm_password_input_label": "Confirm your password",
+    "confirm_password_input_error": "Passwords do not match"
 }

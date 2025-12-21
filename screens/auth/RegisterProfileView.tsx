@@ -38,6 +38,7 @@ const RegisterProfileView = () => {
     phone: Yup.string()
       .matches(/^\+?[0-9]{12,15}$/, t('phone_invalid'))
       .required(t('phone_required')),
+    documentNumber: Yup.string().required(t('document_number_required')),
   });
 
   const formik = useFormik({
@@ -47,16 +48,18 @@ const RegisterProfileView = () => {
       email: '',
       confirmEmail: '',
       phone: '',
+      documentNumber: '',
     },
     validationSchema,
     onSubmit: (values) => {
       try {
-        const { phone, email, lastName, name } = values;
+        const { phone, email, lastName, name, documentNumber } = values;
         createUser({
           name,
           lastName,
           email,
           phoneNumber: phone,
+          numeroDocumento: documentNumber,
         });
         navigation.navigate('RegisterDetailsView' as never);
       } catch (error: Error | any) {
@@ -68,7 +71,7 @@ const RegisterProfileView = () => {
     },
   });
 
-  const { name, lastName, email, confirmEmail, phone } = formik.values;
+  const { name, lastName, email, confirmEmail, phone, documentNumber } = formik.values;
 
   return (
     <KeyboardAvoidingView
@@ -94,7 +97,21 @@ const RegisterProfileView = () => {
           </Text>
           <Text style={styles.subtitle}>{t('your_application')}</Text>
 
-          <View style={styles.inputEmailContainer}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputText}>{t('document_number')}</Text>
+            <TextInput
+              style={{ fontSize: 16, color: DARK_BLACK }}
+              keyboardType="number-pad"
+              cursorColor={BACKGROUND_COLOR}
+              value={documentNumber}
+              onChangeText={formik.handleChange('documentNumber')}
+              onBlur={formik.handleBlur('documentNumber')}
+            />
+          </View>
+          {formik.touched.documentNumber && formik.errors.documentNumber && (
+            <Text style={styles.errorText}>{formik.errors.documentNumber}</Text>
+          )}
+          <View style={styles.inputContainer}>
             <Text style={styles.inputText}>{t('name')}</Text>
             <TextInput
               style={{ fontSize: 16, color: DARK_BLACK }}
@@ -109,7 +126,7 @@ const RegisterProfileView = () => {
             <Text style={styles.errorText}>{formik.errors.name}</Text>
           )}
 
-          <View style={styles.inputEmailContainer}>
+          <View style={styles.inputContainer}>
             <Text style={styles.inputText}>{t('last_name')}</Text>
             <TextInput
               style={{ fontSize: 16, color: DARK_BLACK }}
@@ -124,7 +141,7 @@ const RegisterProfileView = () => {
             <Text style={styles.errorText}>{formik.errors.lastName}</Text>
           )}
 
-          <View style={[styles.inputEmailContainer, { marginTop: 30 }]}>
+          <View style={[styles.inputContainer, { marginTop: 30 }]}>
             <Text style={styles.inputText}>{t('write_email')}</Text>
             <TextInput
               style={{ fontSize: 16, color: DARK_BLACK }}
@@ -142,7 +159,7 @@ const RegisterProfileView = () => {
             <Text style={styles.errorText}>{formik.errors.email}</Text>
           )}
 
-          <View style={[styles.inputEmailContainer, { marginTop: 30 }]}>
+          <View style={[styles.inputContainer, { marginTop: 30 }]}>
             <Text style={styles.inputText}>{t('confirm_email')}</Text>
             <TextInput
               style={{ fontSize: 16, color: DARK_BLACK }}
@@ -227,7 +244,7 @@ const styles = StyleSheet.create({
     color: GRAY_COLOR,
     marginTop: 20,
   },
-  inputEmailContainer: {
+  inputContainer: {
     borderBottomWidth: 1,
     borderBottomColor: GRAY_COLOR,
   },

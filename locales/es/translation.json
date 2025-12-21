@@ -62,5 +62,16 @@
     "last_name_required": "El apellido es obligatorio",
     "last_name_invalid": "El apellido no puede contener números o caracteres especiales",
     "error_creating_user": "Hubo un error al crear el usuario. Por favor, inténtalo de nuevo. {{error}}",
-    "error": "Error"
+    "error": "Error",
+    "document_number": "Número de documento",
+    "document_number_required": "El número de documento es obligatorio",
+    "registration_almost_complete_text": "Ya casi terminamos",
+    "registration_almost_complete_suffix": "con tu registro",
+    "finish_registration_text": "Finaliza tu registro",
+    "finish_registration_suffix": "para comenzar a utilizar nuestros servicios",
+    "password_input_placeholder": "Ingresa tu contraseña",
+    "password_input_error": "La contraseña debe tener al menos 8 caracteres",
+    "password_input_label": "Contraseña",
+    "confirm_password_input_label": "Confirma tu contraseña",
+    "confirm_password_input_error": "Las contraseñas no coinciden"
 }
