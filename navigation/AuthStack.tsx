@@ -2,10 +2,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from 'screens/auth/Login';
 import PasswordView from 'screens/auth/PasswordView';
 import RegisterDetailsView from 'screens/auth/RegisterDetailsView';
+import RegisterPin from 'screens/auth/RegisterPin';
 import RegisterProfileView from 'screens/auth/RegisterProfileView';
 
 const AuthStack = createStackNavigator({
-  initialRouteName: 'RegisterProfileView',
+  initialRouteName: 'RegisterPin',
   screens: {
     Login: {
       screen: Login,
@@ -21,6 +22,10 @@ const AuthStack = createStackNavigator({
     },
     RegisterProfileView: {
       screen: RegisterProfileView,
+      options: { headerShown: false },
+    },
+    RegisterPin: {
+      screen: RegisterPin,
       options: { headerShown: false },
     },
     PasswordView: {

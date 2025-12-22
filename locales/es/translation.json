@@ -63,6 +63,10 @@
     "last_name_invalid": "El apellido no puede contener números o caracteres especiales",
     "error_creating_user": "Hubo un error al crear el usuario. Por favor, inténtalo de nuevo. {{error}}",
     "error": "Error",
+    "pin_label": "Crea un PIN de 4 dígitos",
+    "pin_placeholder": "Ingresa tu PIN",
+    "pin_error": "El PIN debe tener 4 dígitos",
+    "pin_required": "El PIN es obligatorio",
     "document_number": "Número de documento",
     "document_number_required": "El número de documento es obligatorio",
     "registration_almost_complete_text": "Ya casi terminamos",
@@ -76,5 +80,7 @@
     "confirm_password_required": "La confirmación de contraseña es obligatoria",
     "password_input_label": "Contraseña",
     "confirm_password_input_label": "Confirma tu contraseña",
-    "error_password": "Error al crear la contraseña. Por favor, inténtalo de nuevo."
+    "error_password": "Error al crear la contraseña. Por favor, inténtalo de nuevo.{{error}}",
+    "save": "Guardar",
+    "error_pin": "Error al crear el PIN. Por favor, inténtalo de nuevo.{{error}}"
 }

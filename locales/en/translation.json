@@ -63,6 +63,10 @@
     "last_name_invalid": "Last name cannot contain numbers or special characters",
     "error_creating_user": "There was an error creating the user. Please try again. {{error}}",
     "error": "Error",
+    "pin_label": "Create a 4-digit PIN",
+    "pin_placeholder": "Enter your PIN",
+    "pin_error": "The PIN must be 4 digits",
+    "pin_required": "The PIN is required",
     "document_number": "Document number",
     "document_number_required": "Document number is required",
     "registration_almost_complete_text": "Almost finished",
@@ -77,5 +81,7 @@
     "password_required": "Password is required",
     "confirm_password_mismatch": "Passwords do not match",
     "confirm_password_required": "Password confirmation is required",
-    "error_password": "Error creating the password. Please try again."
+    "error_password": "Error creating the password. Please try again.{{error}}",
+    "save": "Save",
+    "error_pin": "Error creating the PIN. Please try again.{{error}}"
 }
