@@ -71,7 +71,10 @@
     "finish_registration_suffix": "para comenzar a utilizar nuestros servicios",
     "password_input_placeholder": "Ingresa tu contraseña",
     "password_input_error": "La contraseña debe tener al menos 8 caracteres",
+    "password_required": "La contraseña es obligatoria",
+    "confirm_password_mismatch": "Las contraseñas no coinciden",
+    "confirm_password_required": "La confirmación de contraseña es obligatoria",
     "password_input_label": "Contraseña",
     "confirm_password_input_label": "Confirma tu contraseña",
-    "confirm_password_input_error": "Las contraseñas no coinciden"
+    "error_password": "Error al crear la contraseña. Por favor, inténtalo de nuevo."
 }
