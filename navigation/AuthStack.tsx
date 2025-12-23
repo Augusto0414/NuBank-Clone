@@ -6,7 +6,7 @@ import RegisterPin from 'screens/auth/RegisterPin';
 import RegisterProfileView from 'screens/auth/RegisterProfileView';
 
 const AuthStack = createStackNavigator({
-  initialRouteName: 'RegisterPin',
+  initialRouteName: 'RegisterProfileView',
   screens: {
     Login: {
       screen: Login,

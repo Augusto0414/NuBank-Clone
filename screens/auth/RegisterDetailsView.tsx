@@ -33,6 +33,7 @@ const RegisterDetailsView = () => {
       try {
         const { password } = values;
         createUser({ passWord: password });
+        navigation.navigate('RegisterPin' as never);
       } catch (error: Error | any) {
         showToast({
           title: t('error'),

@@ -83,5 +83,6 @@
     "confirm_password_required": "Password confirmation is required",
     "error_password": "Error creating the password. Please try again.{{error}}",
     "save": "Save",
-    "error_pin": "Error creating the PIN. Please try again.{{error}}"
+    "error_pin": "Error creating the PIN. Please try again.{{error}}",
+    "existing_account": "Existing account"
 }
