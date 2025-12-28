@@ -9,6 +9,7 @@
     "login_button": "Use Fingerprint or Face",
     "password_button": "Use Password Instead",
     "password_title": "Enter your password with at least 8 characters",
+    "login_title": "Enter your email and password",
     "password_forgot": "I forgot my password?",
     "reset_password": "To reset your password, you will need to log in again.",
     "reset_password_info": "Enter your identity document and select the 'I forgot my password' option.",
@@ -99,5 +100,7 @@
     "welcome_smart_description": "Control your finances with advanced tools",
     "welcome_create_account": "Create account",
     "welcome_already_account": "I already have an account",
-    "welcome_terms": "By continuing, you accept our terms and conditions"
+    "welcome_terms": "By continuing, you accept our terms and conditions",
+    "email": "Email",
+    "password": "Password"
 }

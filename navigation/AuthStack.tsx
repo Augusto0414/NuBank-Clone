@@ -2,12 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer, Theme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useEffect, useState } from 'react';
+import AuthView from 'screens/auth/AuthView';
 import Login from 'screens/auth/Login';
-import PasswordView from 'screens/auth/PasswordView';
 import RegisterDetailsView from 'screens/auth/RegisterDetailsView';
 import RegisterPin from 'screens/auth/RegisterPin';
 import RegisterProfileView from 'screens/auth/RegisterProfileView';
 import WelcomeView from 'screens/welcome/WelcomeView';
+import PasswordView from '../screens/auth/PasswordView';
 
 type AuthStackProps = {
   theme: Theme;
@@ -30,9 +31,10 @@ const AuthStack = ({ theme }: AuthStackProps) => {
 
   return (
     <NavigationContainer theme={theme}>
-      <Stack.Navigator initialRouteName={hasEmail ? 'Login' : 'Welcome'}>
+      <Stack.Navigator initialRouteName={hasEmail ? 'AuthView' : 'Welcome'}>
         <Stack.Screen name="Welcome" component={WelcomeView} options={{ headerShown: false }} />
 
+        <Stack.Screen name="AuthView" component={AuthView} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 
         <Stack.Screen

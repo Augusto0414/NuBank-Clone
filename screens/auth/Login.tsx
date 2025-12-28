@@ -1,101 +1,186 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { HandleBottomSheet } from 'components/BottomSheet';
 import { COLORS } from 'constants/Colors';
-import React from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+const EYE_ICON = require('../../assets/img/eyes.jpg');
+const EYE_OFF_ICON = require('../../assets/img/eyes_close.jpg');
 
-const LOGO = require('../../assets/img/LOGO.png');
-
-const { BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, DARK_BUTON_LOGIN } = COLORS;
-const Login = () => {
-  const insets = useSafeAreaInsets();
+const { GRAY_COLOR, BACKGROUND_COLOR, LIGHT_GRAY, GRAY_ARROW_COLOR } = COLORS;
+const PasswordView = () => {
   const { t } = useTranslation();
-  const route = useNavigation();
+  const insets = useSafeAreaInsets();
+  const navigate = useNavigation();
+  const [isActiveBottomSheet, setIsActiveBottomSheet] = useState<boolean>(false);
+  const [isPasswordVisisible, setIsPasswordVisisible] = useState<boolean>(false);
 
   return (
     <View
-      style={[
-        {
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-          flex: 1,
-        },
-        styles.container,
-      ]}>
-      <Image source={LOGO} style={styles.logo} />
-
-      <Text style={styles.infoDescriptionText}>{t('welcome_security')}</Text>
-
-      <View style={styles.buttomContainer}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={async () => {
-            console.log('remove Existing account');
-            await AsyncStorage.removeItem('user_email');
-          }}>
-          <Text style={styles.buttomLogin}>{t('login_button')}</Text>
-        </TouchableOpacity>
-
+      style={{
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        flex: 1,
+        paddingHorizontal: 25,
+        backgroundColor: '#FFFFFF',
+      }}>
+      <View style={{ marginTop: 30 }}>
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
-            route.navigate('PasswordView' as never);
+            navigate.goBack();
           }}>
-          <Text style={styles.buttomPassword}>{t('password_button')}</Text>
+          <Ionicons name="chevron-back" size={28} color="#000" />
         </TouchableOpacity>
       </View>
+
+      <View style={{ marginTop: 20 }}>
+        <Text style={styles.titleContente}>{t('login_title')}</Text>
+      </View>
+
+      <View style={[styles.inputContainer, { marginTop: 40, marginBottom: 20 }]}>
+        <Text style={styles.label}>{t('email')}</Text>
+        <TextInput style={styles.input} keyboardType="default" cursorColor={BACKGROUND_COLOR} />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>{t('password')}</Text>
+        <TextInput
+          style={styles.input}
+          keyboardType="default"
+          cursorColor={BACKGROUND_COLOR}
+          secureTextEntry={!isPasswordVisisible}
+        />
+
+        <TouchableOpacity
+          style={styles.eyeButton}
+          activeOpacity={0.7}
+          onPress={() => {
+            setIsPasswordVisisible(!isPasswordVisisible);
+          }}>
+          <Image
+            source={isPasswordVisisible ? EYE_ICON : EYE_OFF_ICON}
+            style={styles.eyeIcon}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity activeOpacity={0.7} style={styles.button}>
+        <Ionicons style={styles.icon} name="arrow-forward" size={28} color="#000" />
+      </TouchableOpacity>
+
+      <HandleBottomSheet
+        isVisible={isActiveBottomSheet}
+        onClose={() => setIsActiveBottomSheet(false)}>
+        <View style={{ paddingVertical: 30 }}>
+          <Text style={{ fontSize: 30, fontWeight: '600', color: '#000' }}>
+            {t('reset_password')}
+          </Text>
+          <Text style={{ fontSize: 18, marginTop: 10, color: '#666' }}>
+            {t('reset_password_info')}
+          </Text>
+          <View>
+            <TouchableOpacity
+              style={{
+                marginTop: 30,
+                backgroundColor: BACKGROUND_COLOR,
+                paddingVertical: 15,
+                borderRadius: 30,
+                alignItems: 'center',
+              }}
+              activeOpacity={0.7}
+              onPress={() => {
+                setIsActiveBottomSheet(false);
+              }}>
+              <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>
+                {t('button_submit')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                marginTop: 15,
+                paddingVertical: 15,
+                borderRadius: 30,
+                alignItems: 'center',
+                backgroundColor: LIGHT_GRAY,
+              }}
+              activeOpacity={0.7}
+              onPress={() => {
+                setIsActiveBottomSheet(false);
+              }}>
+              <Text style={{ color: '#000', fontSize: 14, fontWeight: '600' }}>
+                {t('button_cancel')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </HandleBottomSheet>
     </View>
   );
 };
 
+export default PasswordView;
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: BACKGROUND_COLOR,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-  },
-
-  logo: {
-    width: 300,
-    height: 300,
-    resizeMode: 'contain',
-    position: 'relative',
-    top: 90,
-    left: -30,
-  },
-
-  infoDescriptionText: {
-    color: DARK_BUTON_TEXT_COLOR,
+  titleContente: {
     textAlign: 'justify',
-    fontSize: 18,
-    marginBottom: 40,
+    fontSize: 32,
+    fontWeight: '500',
   },
 
-  buttomContainer: {
+  inputContainer: {
+    marginTop: 20,
     width: '100%',
-    gap: 25,
-    marginTop: 'auto',
-    marginBottom: 30,
+    display: 'flex',
+    alignItems: 'flex-start',
   },
-
-  buttomLogin: {
+  label: {
     width: '100%',
-    textAlign: 'center',
-    borderRadius: 20,
-    backgroundColor: DARK_BUTON_LOGIN,
-    paddingVertical: 15,
-    color: 'transparent',
+    fontSize: 14,
+    color: GRAY_COLOR,
+    marginBottom: 8,
   },
-
-  buttomPassword: {
+  input: {
     width: '100%',
-    textAlign: 'center',
-    color: DARK_BUTON_TEXT_COLOR,
-    paddingVertical: 10,
+    height: 60,
+    fontSize: 22,
+    color: '#000',
+    borderBottomWidth: 1,
+    borderBottomColor: GRAY_COLOR,
+  },
+  forgotPasswordText: {
+    marginTop: 21,
+    color: BACKGROUND_COLOR,
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  button: {
+    position: 'absolute',
+    right: 25,
+    bottom: 45,
+    width: 70,
+    height: 70,
+    marginTop: 40,
+    backgroundColor: LIGHT_GRAY,
+    borderRadius: '100%',
+  },
+  icon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 21,
+    marginLeft: 21,
+    color: GRAY_ARROW_COLOR,
+  },
+  eyeIcon: {
+    width: 32,
+    height: 32,
+  },
+  eyeButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 10,
   },
 });
-
-export default Login;

@@ -9,6 +9,7 @@
     "login_button": "Usar huella o rostro",
     "password_button": "Entrar con contraseña",
     "password_title": "Ingresa tu contraseña de almenos 8 caracteres",
+    "login_title": "Ingresa tu correo electrónico y contraseña",
     "password_forgot": "Olvidé la contraseña?",
     "reset_password": "Para restablecer tu contraseña, volverás a iniciar sesión.",
     "reset_password_info": "Ingresa tu documento de identidad y seleciona la opción 'Olvidé la contraseña'.",
@@ -98,5 +99,7 @@
     "welcome_smart_description": "Controla tus finanzas con herramientas avanzadas",
     "welcome_create_account": "Crear cuenta",
     "welcome_already_account": "Ya tengo cuenta",
-    "welcome_terms": "Al continuar, aceptas nuestros términos y condiciones"
+    "welcome_terms": "Al continuar, aceptas nuestros términos y condiciones",
+    "email": "Correo electrónico",
+    "password": "Contraseña"
 }
