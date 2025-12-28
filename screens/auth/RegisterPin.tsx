@@ -1,4 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { FormField } from 'components/FormField';
 import { showToast } from 'components/Toast';
 import { COLORS } from 'constants/Colors';
 import { useFormik } from 'formik';
@@ -7,24 +9,32 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
+  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { createAccount, createProfile, supabaseAuth } from 'service/auth/register.service';
+
+import {
+  checkDuplicateProfile,
+  createAccount,
+  createProfile,
+  supabaseAuth,
+} from 'service/auth/register.service';
 import { supabase } from 'utils/supabase';
 import * as Yup from 'yup';
-const { BACKGROUND_COLOR, GRAY_COLOR, WHITE, GRAY_ARROW_COLOR } = COLORS;
+
+const { BACKGROUND_COLOR, GRAY_COLOR, WHITE, LIGHT_GRAY } = COLORS;
 const RegisterPin = () => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const { createUser, userRegister } = useRegister();
+
   const validateFormik = Yup.object({
     pin: Yup.string().length(4, t('pin_error')).required(t('pin_required')),
   });
@@ -36,6 +46,23 @@ const RegisterPin = () => {
       try {
         setIsLoader(true);
         createUser({ pin: values.pin });
+        const duplicate = await checkDuplicateProfile({
+          email: userRegister?.email!,
+          phoneNumber: userRegister?.phoneNumber!,
+          numeroDocumento: userRegister?.numeroDocumento!,
+        });
+
+        if (!duplicate.error && duplicate.data.hasDuplicate) {
+          const { duplicateEmail, duplicatePhone } = duplicate.data;
+          const message = duplicateEmail
+            ? t('duplicate_email')
+            : duplicatePhone
+              ? t('duplicate_phone')
+              : t('duplicate_document');
+
+          showToast({ title: t('error'), message });
+          return;
+        }
         const authResult = await supabaseAuth({
           email: userRegister?.email!,
           password: userRegister?.passWord!,
@@ -53,13 +80,14 @@ const RegisterPin = () => {
           });
           return;
         }
-
+        await AsyncStorage.setItem('user_email', userRegister?.email!);
         const accountResult = await createAccount({
           userID: authResult.user.id,
           pin: values.pin,
         });
 
         if (accountResult.error) {
+          await AsyncStorage.removeItem('user_email');
           await supabase.auth.admin.deleteUser(authResult.user.id);
           showToast({
             title: t('error'),
@@ -91,7 +119,7 @@ const RegisterPin = () => {
           title: t('success'),
           message: t('registration_complete'),
         });
-        navigation.navigate('Home' as never);
+        navigation.navigate('Login' as never);
       } catch (error: any) {
         showToast({
           title: t('error'),
@@ -103,97 +131,136 @@ const RegisterPin = () => {
     },
   });
   const { pin } = form.values;
-  return (
-    <View
-      style={{
-        paddingTop: insets.top,
-        flex: 1,
-        paddingBottom: insets.bottom,
-        marginHorizontal: 20,
-      }}>
-      <TouchableOpacity
-        style={{ marginTop: 20 }}
-        onPress={() => navigation.goBack()}
-        disabled={isLoader}>
-        <Ionicons name="chevron-back" size={28} color={GRAY_ARROW_COLOR} />
-      </TouchableOpacity>
 
-      <View>
-        <Text style={styles.textContainer}>
-          <Text>{t('finish_registration_text')} </Text>
-          <Text style={styles.secondaryText}>{t('finish_registration_suffix')}</Text>
-        </Text>
-        <Text style={styles.labelText}>{t('pin_label')}</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={{ fontSize: 18, paddingVertical: 10 }}
+  return (
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}>
+      <View
+        style={{
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          marginHorizontal: 20,
+          flex: 1,
+          justifyContent: 'space-between',
+        }}>
+        <View>
+          {/* Header con botón atrás */}
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+            disabled={isLoader}
+            activeOpacity={0.7}>
+            <Ionicons name="chevron-back" size={28} color={BACKGROUND_COLOR} />
+          </TouchableOpacity>
+
+          {/* Título */}
+          <View style={styles.header}>
+            <Text style={styles.textContainer}>
+              <Text style={styles.primaryText}>{t('finish_registration_text')} </Text>
+              <Text style={styles.secondaryText}>{t('finish_registration_suffix')}</Text>
+            </Text>
+          </View>
+
+          {/* Barra de progreso */}
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: '100%' }]} />
+          </View>
+
+          {/* Campo PIN */}
+          <FormField
+            icon="key"
+            label="pin"
             placeholder={t('pin_placeholder')}
-            cursorColor={BACKGROUND_COLOR}
-            keyboardType="numeric"
-            maxLength={4}
             value={pin}
             onChangeText={form.handleChange('pin')}
-            onBlur={form.handleBlur('pin')}
-            secureTextEntry={true}
+            onBlur={() => form.handleBlur('pin')}
+            error={form.errors.pin}
+            touched={form.touched.pin}
+            keyboardType="number-pad"
+            maxLength={4}
             editable={!isLoader}
           />
         </View>
+
+        {/* Botón continuar */}
+        <TouchableOpacity
+          onPress={() => form.handleSubmit()}
+          activeOpacity={0.8}
+          style={[styles.button, isLoader && styles.buttonDisabled]}
+          disabled={isLoader}>
+          {isLoader ? (
+            <ActivityIndicator color={WHITE} size="small" />
+          ) : (
+            <>
+              <Text style={styles.buttonText}>{t('save')}</Text>
+              <Ionicons name="arrow-forward" size={18} color={WHITE} />
+            </>
+          )}
+        </TouchableOpacity>
       </View>
-
-      {form.errors.pin && form.touched.pin && (
-        <Text style={{ color: 'red', marginTop: 5 }}>{form.errors.pin}</Text>
-      )}
-
-      <TouchableOpacity
-        onPress={() => form.handleSubmit()}
-        activeOpacity={0.7}
-        style={[styles.button, isLoader && styles.buttonDisabled]}
-        disabled={isLoader}>
-        {isLoader ? (
-          <ActivityIndicator color={WHITE} />
-        ) : (
-          <Text style={{ color: WHITE, fontWeight: '400', fontSize: 14 }}>{t('save')}</Text>
-        )}
-      </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  textContainer: {
-    fontSize: 26,
-    fontWeight: '500',
+  backButton: {
     marginTop: 20,
+    marginBottom: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  primaryText: {},
+  header: {
+    marginBottom: 20,
+  },
+  textContainer: {
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  primaryText: {
+    color: '#000',
+  },
   secondaryText: {
     color: BACKGROUND_COLOR,
   },
-  labelText: {
-    marginTop: 50,
-    marginBottom: 10,
-    fontSize: 16,
-    fontWeight: '400',
+  progressBar: {
+    height: 4,
+    backgroundColor: LIGHT_GRAY,
+    borderRadius: 2,
+    marginBottom: 30,
+    overflow: 'hidden',
   },
-  inputContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: GRAY_COLOR,
-    fontSize: 18,
+  progressFill: {
+    height: '100%',
+    backgroundColor: BACKGROUND_COLOR,
+    borderRadius: 2,
   },
   button: {
     backgroundColor: BACKGROUND_COLOR,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 60,
-    borderRadius: 10,
-    marginBottom: 60,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    height: 52,
+    borderRadius: 12,
+    marginBottom: 20,
+    gap: 8,
+    shadowColor: BACKGROUND_COLOR,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
   buttonDisabled: {
     opacity: 0.6,
   },
+  buttonText: {
+    color: WHITE,
+    fontWeight: '600',
+    fontSize: 16,
+  },
 });
+
 export default RegisterPin;

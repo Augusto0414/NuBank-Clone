@@ -84,5 +84,20 @@
     "error_password": "Error creating the password. Please try again.{{error}}",
     "save": "Save",
     "error_pin": "Error creating the PIN. Please try again.{{error}}",
-    "existing_account": "Existing account"
+    "existing_account": "Existing account",
+    "duplicate_email": "Email is already registered",
+    "duplicate_phone": "Phone number is already registered",
+    "duplicate_document": "Document number is already registered",
+    "registration_complete": "Registration complete!",
+    "welcome_title": "Welcome to Nu",
+    "welcome_subtitle": "Your digital bank in your pocket",
+    "welcome_fast": "Fast",
+    "welcome_fast_description": "Open your account in less than 5 minutes",
+    "welcome_secure": "Secure",
+    "welcome_secure_description": "Your data is protected with encryption technology",
+    "welcome_smart": "Smart",
+    "welcome_smart_description": "Control your finances with advanced tools",
+    "welcome_create_account": "Create account",
+    "welcome_already_account": "I already have an account",
+    "welcome_terms": "By continuing, you accept our terms and conditions"
 }

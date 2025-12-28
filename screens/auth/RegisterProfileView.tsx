@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
+import { FormField } from 'components/FormField';
 import { showToast } from 'components/Toast';
 import { COLORS } from 'constants/Colors';
 import { useFormik } from 'formik';
 import { useRegister } from 'hooks/useRegister';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   KeyboardAvoidingView,
@@ -11,15 +12,15 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as Yup from 'yup';
 
-const { BACKGROUND_COLOR, DARK_BLACK, GRAY_COLOR, WHITE } = COLORS;
+const { BACKGROUND_COLOR, DARK_BLACK, GRAY_COLOR, WHITE, LIGHT_GRAY } = COLORS;
 
 const RegisterProfileView = () => {
   const { t } = useTranslation();
@@ -27,6 +28,7 @@ const RegisterProfileView = () => {
   const phoneInput = useRef(null);
   const { createUser } = useRegister();
   const navigation = useNavigation();
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const validationSchema = Yup.object({
     name: Yup.string().min(2, t('name_invalid')).required(t('name_required')),
@@ -89,129 +91,127 @@ const RegisterProfileView = () => {
             paddingBottom: insets.bottom,
             marginHorizontal: 20,
           }}>
-          <Text style={styles.textContent}>
-            <Text style={styles.primaryTitle}>
-              {t('continue_your_application')} {''}
+          <View style={styles.header}>
+            <Text style={styles.textContent}>
+              <Text style={styles.primaryTitle}>
+                {t('continue_your_application')} {''}
+              </Text>
+              <Text style={styles.secundaryText}>{t('using_email_and_phone')}</Text>
             </Text>
-            <Text style={styles.secundaryText}>{t('using_email_and_phone')}</Text>
-          </Text>
-          <Text style={styles.subtitle}>{t('your_application')}</Text>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputText}>{t('document_number')}</Text>
-            <TextInput
-              style={{ fontSize: 16, color: DARK_BLACK }}
-              keyboardType="number-pad"
-              cursorColor={BACKGROUND_COLOR}
-              value={documentNumber}
-              onChangeText={formik.handleChange('documentNumber')}
-              onBlur={formik.handleBlur('documentNumber')}
-            />
+            <Text style={styles.subtitle}>{t('your_application')}</Text>
           </View>
-          {formik.touched.documentNumber && formik.errors.documentNumber && (
-            <Text style={styles.errorText}>{formik.errors.documentNumber}</Text>
-          )}
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputText}>{t('name')}</Text>
-            <TextInput
-              style={{ fontSize: 16, color: DARK_BLACK }}
-              keyboardType="default"
-              cursorColor={BACKGROUND_COLOR}
-              value={name}
-              onChangeText={formik.handleChange('name')}
-              onBlur={formik.handleBlur('name')}
-            />
-          </View>
-          {formik.touched.name && formik.errors.name && (
-            <Text style={styles.errorText}>{formik.errors.name}</Text>
-          )}
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputText}>{t('last_name')}</Text>
-            <TextInput
-              style={{ fontSize: 16, color: DARK_BLACK }}
-              keyboardType="default"
-              cursorColor={BACKGROUND_COLOR}
-              value={lastName}
-              onChangeText={formik.handleChange('lastName')}
-              onBlur={formik.handleBlur('lastName')}
-            />
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: '50%' }]} />
           </View>
-          {formik.touched.lastName && formik.errors.lastName && (
-            <Text style={styles.errorText}>{formik.errors.lastName}</Text>
-          )}
+          <FormField
+            icon="id-card"
+            label="documentNumber"
+            placeholder={t('document_number')}
+            value={documentNumber}
+            onChangeText={formik.handleChange('documentNumber')}
+            onBlur={() => formik.handleBlur('documentNumber')}
+            error={formik.errors.documentNumber}
+            touched={formik.touched.documentNumber}
+            keyboardType="number-pad"
+          />
 
-          <View style={[styles.inputContainer, { marginTop: 30 }]}>
-            <Text style={styles.inputText}>{t('write_email')}</Text>
-            <TextInput
-              style={{ fontSize: 16, color: DARK_BLACK }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="email"
-              cursorColor={BACKGROUND_COLOR}
-              value={email}
-              onChangeText={formik.handleChange('email')}
-              onBlur={formik.handleBlur('email')}
-            />
+          <FormField
+            icon="person"
+            label="name"
+            placeholder={t('name')}
+            value={name}
+            onChangeText={formik.handleChange('name')}
+            onBlur={() => formik.handleBlur('name')}
+            error={formik.errors.name}
+            touched={formik.touched.name}
+          />
+
+          <FormField
+            icon="person-add"
+            label="lastName"
+            placeholder={t('last_name')}
+            value={lastName}
+            onChangeText={formik.handleChange('lastName')}
+            onBlur={() => formik.handleBlur('lastName')}
+            error={formik.errors.lastName}
+            touched={formik.touched.lastName}
+          />
+
+          <FormField
+            icon="mail"
+            label="email"
+            placeholder={t('write_email')}
+            value={email}
+            onChangeText={formik.handleChange('email')}
+            onBlur={() => formik.handleBlur('email')}
+            error={formik.errors.email}
+            touched={formik.touched.email}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+
+          <FormField
+            icon="mail-unread"
+            label="confirmEmail"
+            placeholder={t('confirm_email')}
+            value={confirmEmail}
+            onChangeText={formik.handleChange('confirmEmail')}
+            onBlur={() => formik.handleBlur('confirmEmail')}
+            error={formik.errors.confirmEmail}
+            touched={formik.touched.confirmEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+
+          <View style={styles.fieldWrapper}>
+            <View
+              style={[
+                styles.phoneContainer,
+                focusedField === 'phone' && styles.inputContainerFocused,
+                formik.touched.phone && formik.errors.phone && styles.inputContainerError,
+              ]}
+              onTouchStart={() => setFocusedField('phone')}
+              onTouchEnd={() => {
+                formik.handleBlur('phone');
+                setFocusedField(null);
+              }}>
+              <Ionicons
+                name="call"
+                size={20}
+                color={focusedField === 'phone' ? BACKGROUND_COLOR : GRAY_COLOR}
+              />
+              <PhoneInput
+                ref={phoneInput}
+                value={phone}
+                defaultCode="CO"
+                layout="first"
+                containerStyle={styles.phoneInputContainer}
+                filterProps={{
+                  placeholder: t('search_country'),
+                }}
+                placeholder={t('phone_number_placeholder')}
+                textContainerStyle={styles.phoneTextContainer}
+                textInputStyle={styles.phoneInput}
+                onChangeFormattedText={(text) => {
+                  let trimText = text.replace(/\s/g, '');
+                  formik.setFieldValue('phone', trimText);
+                }}
+              />
+            </View>
+            {formik.touched.phone && formik.errors.phone && (
+              <View style={styles.errorContainer}>
+                <Ionicons name="alert-circle" size={14} color="#E74C3C" />
+                <Text style={styles.errorText}>{formik.errors.phone}</Text>
+              </View>
+            )}
           </View>
-          {formik.touched.email && formik.errors.email && (
-            <Text style={styles.errorText}>{formik.errors.email}</Text>
-          )}
-
-          <View style={[styles.inputContainer, { marginTop: 30 }]}>
-            <Text style={styles.inputText}>{t('confirm_email')}</Text>
-            <TextInput
-              style={{ fontSize: 16, color: DARK_BLACK }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="off"
-              textContentType="none"
-              importantForAutofill="no"
-              cursorColor={BACKGROUND_COLOR}
-              value={confirmEmail}
-              onChangeText={formik.handleChange('confirmEmail')}
-              onBlur={formik.handleBlur('confirmEmail')}
-            />
-          </View>
-          {formik.touched.confirmEmail && formik.errors.confirmEmail && (
-            <Text style={styles.errorText}>{formik.errors.confirmEmail}</Text>
-          )}
-
-          <View style={{ marginTop: 30 }}>
-            <PhoneInput
-              ref={phoneInput}
-              value={phone}
-              defaultCode="CO"
-              layout="first"
-              containerStyle={{
-                width: '100%',
-                borderBottomWidth: 1,
-                borderBottomColor: GRAY_COLOR,
-                backgroundColor: 'transparent',
-              }}
-              filterProps={{
-                placeholder: t('search_country'),
-              }}
-              placeholder={t('phone_number_placeholder')}
-              textContainerStyle={{ paddingVertical: 0, backgroundColor: 'transparent' }}
-              textInputStyle={{ color: DARK_BLACK, fontSize: 16 }}
-              onChangeFormattedText={(text) => {
-                let trimText = text.replace(/\s/g, '');
-                formik.setFieldValue('phone', trimText);
-              }}
-            />
-          </View>
-          {formik.touched.phone && formik.errors.phone && (
-            <Text style={styles.errorText}>{formik.errors.phone}</Text>
-          )}
-
           <TouchableOpacity
             style={styles.button}
             onPress={() => formik.handleSubmit()}
-            activeOpacity={0.7}>
-            <Text style={{ color: WHITE, fontWeight: '400', fontSize: 14 }}>{t('continue')}</Text>
+            activeOpacity={0.8}>
+            <Text style={styles.buttonText}>{t('continue')}</Text>
+            <Ionicons name="arrow-forward" size={18} color={WHITE} />
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -220,47 +220,127 @@ const RegisterProfileView = () => {
 };
 
 const styles = StyleSheet.create({
-  textContent: {
+  header: {
     marginTop: 30,
+    marginBottom: 20,
+  },
+  textContent: {
+    marginBottom: 8,
   },
   primaryTitle: {
-    fontSize: 26,
-    fontWeight: '500',
+    fontSize: 24,
+    fontWeight: '600',
     color: BACKGROUND_COLOR,
   },
   secundaryText: {
-    fontSize: 26,
-    fontWeight: '500',
+    fontSize: 24,
+    fontWeight: '600',
     color: DARK_BLACK,
   },
   subtitle: {
-    fontSize: 16,
-    color: DARK_BLACK,
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  inputText: {
-    fontSize: 16,
+    fontSize: 14,
     color: GRAY_COLOR,
-    marginTop: 20,
+    marginTop: 4,
+  },
+  progressBar: {
+    height: 4,
+    backgroundColor: LIGHT_GRAY,
+    borderRadius: 2,
+    marginBottom: 30,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: BACKGROUND_COLOR,
+    borderRadius: 2,
+  },
+  fieldWrapper: {
+    marginBottom: 16,
   },
   inputContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: GRAY_COLOR,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+    gap: 10,
+  },
+  inputContainerFocused: {
+    borderColor: BACKGROUND_COLOR,
+    backgroundColor: '#F5ECFF',
+    borderWidth: 1.5,
+  },
+  inputContainerError: {
+    borderColor: '#E74C3C',
+    backgroundColor: '#FADBD8',
+    borderWidth: 1,
+  },
+  input: {
+    flex: 1,
+    fontSize: 14,
+    color: DARK_BLACK,
+    fontWeight: '500',
+  },
+  phoneContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+    gap: 10,
+  },
+  phoneInputContainer: {
+    flex: 1,
+    borderWidth: 0,
+    backgroundColor: 'transparent',
+  },
+  phoneTextContainer: {
+    paddingVertical: 0,
+    backgroundColor: 'transparent',
+  },
+  phoneInput: {
+    color: DARK_BLACK,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6,
+    gap: 4,
+    paddingHorizontal: 4,
   },
   errorText: {
-    color: 'red',
+    color: '#E74C3C',
     fontSize: 12,
-    marginTop: 5,
+    fontWeight: '500',
   },
   button: {
     backgroundColor: BACKGROUND_COLOR,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 60,
-    borderRadius: 10,
-    marginTop: 50,
+    height: 52,
+    borderRadius: 12,
+    marginTop: 30,
     marginBottom: 20,
+    gap: 8,
+    shadowColor: BACKGROUND_COLOR,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  buttonText: {
+    color: WHITE,
+    fontWeight: '600',
+    fontSize: 16,
   },
 });
 

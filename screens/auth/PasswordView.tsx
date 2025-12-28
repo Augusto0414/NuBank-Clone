@@ -1,167 +1,203 @@
 import { useNavigation } from '@react-navigation/native';
 import { HandleBottomSheet } from 'components/BottomSheet';
+import { FormField } from 'components/FormField';
 import { COLORS } from 'constants/Colors';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-const EYE_ICON = require('../../assets/img/eyes.jpg');
-const EYE_OFF_ICON = require('../../assets/img/eyes_close.jpg');
 
+const { BACKGROUND_COLOR, LIGHT_GRAY, WHITE } = COLORS;
 
-const {GRAY_COLOR, BACKGROUND_COLOR, LIGHT_GRAY, GRAY_ARROW_COLOR} = COLORS; 
 const PasswordView = () => {
-const {t} = useTranslation();
-const insets = useSafeAreaInsets(); 
-const navigate = useNavigation();
-const [isActiveBottomSheet, setIsActiveBottomSheet] = useState<boolean>(false);
-const [isPasswordVisisible, setIsPasswordVisisible] = useState<boolean>(false);
-const handleOpenBottomSheet = () => setIsActiveBottomSheet((prev) => !prev);
-  
+  const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
+  const navigate = useNavigation();
+  const [isActiveBottomSheet, setIsActiveBottomSheet] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>('');
+
+  const handleOpenBottomSheet = () => setIsActiveBottomSheet((prev) => !prev);
+
+  const handleContinue = () => {
+    if (password.trim()) {
+      navigate.navigate('Login' as never);
+    }
+  };
   return (
-    <View style={{paddingTop: insets.top, paddingBottom: insets.bottom, flex: 1, paddingHorizontal: 25, backgroundColor: "#FFFFFF"}}>
-      <View style={{marginTop: 30}}>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => {navigate.goBack()}}>
-          <Ionicons name="chevron-back" size={28} color="#000" />
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}>
+      <View
+        style={{
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingHorizontal: 20,
+          flex: 1,
+          justifyContent: 'space-between',
+        }}>
+        <View>
+          {/* Header con botón atrás */}
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigate.goBack()}
+            activeOpacity={0.7}>
+            <Ionicons name="chevron-back" size={28} color={BACKGROUND_COLOR} />
+          </TouchableOpacity>
+
+          {/* Título */}
+          <View style={styles.header}>
+            <Text style={styles.titleContent}>{t('password_title')}</Text>
+          </View>
+
+          {/* Campo de contraseña */}
+          <FormField
+            icon="lock-closed"
+            label="password"
+            placeholder={t('password_input_placeholder')}
+            value={password}
+            onChangeText={setPassword}
+            onBlur={() => {}}
+            secureTextEntry={true}
+          />
+
+          {/* Botón olvidé contraseña */}
+          <TouchableOpacity
+            style={styles.forgotPasswordButton}
+            onPress={handleOpenBottomSheet}
+            activeOpacity={0.7}>
+            <Text style={styles.forgotPasswordText}>{t('password_forgot')}</Text>
+            <Ionicons name="arrow-forward" size={20} color={BACKGROUND_COLOR} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Botón continuar */}
+        <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={handleContinue}>
+          <Text style={styles.buttonText}>{t('continue')}</Text>
+          <Ionicons name="arrow-forward" size={18} color={WHITE} />
         </TouchableOpacity>
       </View>
 
-       <View style={{marginTop: 20}}>
-        <Text style={styles.titleContente}>{t('password_title')}</Text>
-       </View>
+      {/* Bottom Sheet para recuperar contraseña */}
+      <HandleBottomSheet
+        isVisible={isActiveBottomSheet}
+        onClose={() => setIsActiveBottomSheet(false)}>
+        <View style={styles.bottomSheetContent}>
+          <Text style={styles.bottomSheetTitle}>{t('reset_password')}</Text>
+          <Text style={styles.bottomSheetDescription}>{t('reset_password_info')}</Text>
 
-       <View style={styles.inputContainer}>
-         <TextInput style={styles.input}
-          keyboardType="default"
-          cursorColor={BACKGROUND_COLOR}
-          secureTextEntry={!isPasswordVisisible} 
-           />
-         
-          <TouchableOpacity style={styles.eyeButton} activeOpacity={0.7} onPress={() => {setIsPasswordVisisible(!isPasswordVisisible)}}>
-                     <Image source={isPasswordVisisible ? EYE_ICON : EYE_OFF_ICON} style={styles.eyeIcon} resizeMode="contain" />
-          </TouchableOpacity>
-       </View>
-       
-       <TouchableOpacity style={{flexDirection: "row", alignItems: "center"}} onPress={() => {handleOpenBottomSheet()}}>
-        <Text style={styles.forgotPasswordText}>{t("password_forgot")}</Text>
-        <Ionicons style={[styles.icon, {color: BACKGROUND_COLOR}]} name="arrow-forward" size={28} />
-       </TouchableOpacity>
-       
-      <TouchableOpacity 
-        activeOpacity={0.7} 
-        style={styles.button}
-      >
-        <Ionicons style={styles.icon} name="arrow-forward" size={28} color="#000" />
-      </TouchableOpacity>
-
-      <HandleBottomSheet isVisible={isActiveBottomSheet} onClose={() => setIsActiveBottomSheet(false)}>
-        <View style={{ paddingVertical: 30 }}>
-          <Text style={{ fontSize: 30, fontWeight: '600', color: '#000' }}>
-            {t("reset_password")}
-          </Text>
-          <Text style={{ fontSize: 18, marginTop: 10, color: '#666' }}>
-            {t("reset_password_info")}
-          </Text>
-          <View>
+          <View style={styles.bottomSheetButtons}>
             <TouchableOpacity
-              style={{
-                marginTop: 30,
-                backgroundColor: BACKGROUND_COLOR,
-                paddingVertical: 15,
-                borderRadius: 30,
-                alignItems: 'center',
-              }}
+              style={styles.primaryButton}
               activeOpacity={0.7}
-              onPress={() => {
-                setIsActiveBottomSheet(false);
-              }}
-            >
-              <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>
-                {t("button_submit")}
-              </Text>
+              onPress={() => setIsActiveBottomSheet(false)}>
+              <Text style={styles.primaryButtonText}>{t('button_submit')}</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
-              style={{
-                marginTop: 15,
-                paddingVertical: 15,
-                borderRadius: 30,
-                alignItems: 'center',
-                backgroundColor: LIGHT_GRAY
-              }}
+              style={styles.secondaryButton}
               activeOpacity={0.7}
-              onPress={() => {
-                setIsActiveBottomSheet(false);
-              }}
-            >
-              <Text style={{ color: '#000', fontSize: 14, fontWeight: '600' }}>
-                {t("button_cancel")}
-              </Text>
-            </TouchableOpacity> 
-          </View> 
+              onPress={() => setIsActiveBottomSheet(false)}>
+              <Text style={styles.secondaryButtonText}>{t('button_cancel')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </HandleBottomSheet>
-     
-    </View>
-  )
-}
+    </ScrollView>
+  );
+};
 
-export default PasswordView
+const styles = StyleSheet.create({
+  backButton: {
+    marginBottom: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  header: {
+    marginBottom: 30,
+  },
+  titleContent: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#000',
+  },
+  forgotPasswordButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+  },
+  forgotPasswordText: {
+    color: BACKGROUND_COLOR,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  button: {
+    backgroundColor: BACKGROUND_COLOR,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 52,
+    borderRadius: 12,
+    marginBottom: 20,
+    gap: 8,
+    shadowColor: BACKGROUND_COLOR,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  buttonText: {
+    color: WHITE,
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  bottomSheetContent: {
+    paddingVertical: 30,
+    paddingHorizontal: 20,
+  },
+  bottomSheetTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#000',
+    marginBottom: 12,
+  },
+  bottomSheetDescription: {
+    fontSize: 15,
+    color: '#666',
+    lineHeight: 22,
+    marginBottom: 30,
+  },
+  bottomSheetButtons: {
+    gap: 12,
+  },
+  primaryButton: {
+    backgroundColor: BACKGROUND_COLOR,
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  primaryButtonText: {
+    color: WHITE,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  secondaryButton: {
+    backgroundColor: LIGHT_GRAY,
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  secondaryButtonText: {
+    color: '#000',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+});
 
-
-const styles  = StyleSheet.create({
- titleContente: {
-  textAlign: "justify", 
-  fontSize: 32,
-  fontWeight: "500",
- }, 
- 
- inputContainer: {
-  marginTop: 20,
-  width: "100%", 
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
- }, 
- input: {
-  width: "100%",
-  height: 60, 
-  fontSize: 32,
-  color: "#000",
-  borderBottomWidth: 1, 
-  borderBottomColor: GRAY_COLOR,
- }, 
- forgotPasswordText: {
-  marginTop: 21, 
-  color: BACKGROUND_COLOR,
-  fontSize: 16,
-  fontWeight: "500",
- },
- button: { 
-  position: "absolute",
-  right: 25,
-  bottom: 45,
-  width: 70, 
-  height: 70,  
-  marginTop: 40, 
-  backgroundColor: LIGHT_GRAY, 
-  borderRadius: "100%",  
-}, 
-icon: {
-  justifyContent: "center",
-  alignItems: "center",
-  marginTop: 21,
-  marginLeft: 21,
-  color: GRAY_ARROW_COLOR
-}, 
-eyeIcon: {
-  width: 32,
-  height: 32,
-}, 
-eyeButton: {
-  position: "absolute",
-  right: 0,
-  bottom: 10,
-}
-})
+export default PasswordView;

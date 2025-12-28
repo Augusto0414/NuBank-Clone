@@ -83,5 +83,20 @@
     "confirm_password_input_label": "Confirma tu contraseña",
     "error_password": "Error al crear la contraseña. Por favor, inténtalo de nuevo.{{error}}",
     "save": "Guardar",
-    "error_pin": "Error al crear el PIN. Por favor, inténtalo de nuevo.{{error}}"
+    "error_pin": "Error al crear el PIN. Por favor, inténtalo de nuevo.{{error}}",
+    "duplicate_email": "El correo ya está registrado",
+    "duplicate_phone": "El teléfono ya está registrado",
+    "duplicate_document": "El documento ya está registrado",
+    "registration_complete": "¡Registro completo!",
+    "welcome_title": "Bienvenido a Nu",
+    "welcome_subtitle": "Tu banco digital en tu bolsillo",
+    "welcome_fast": "Rápido",
+    "welcome_fast_description": "Abre tu cuenta en menos de 5 minutos",
+    "welcome_secure": "Seguro",
+    "welcome_secure_description": "Tus datos están protegidos con tecnología de encriptación",
+    "welcome_smart": "Inteligente",
+    "welcome_smart_description": "Controla tus finanzas con herramientas avanzadas",
+    "welcome_create_account": "Crear cuenta",
+    "welcome_already_account": "Ya tengo cuenta",
+    "welcome_terms": "Al continuar, aceptas nuestros términos y condiciones"
 }

@@ -10,7 +10,13 @@
       "tsconfigPaths": true
     },
     "plugins": [
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
+        }
+      ]
     ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,7 +30,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This application utilizes the camera to scan your face for login purposes"
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -1,5 +1,52 @@
 import { supabase } from 'utils/supabase';
 
+export type DuplicateCheckResult = {
+  hasDuplicate: boolean;
+  duplicateEmail?: boolean;
+  duplicatePhone?: boolean;
+  duplicateDocument?: boolean;
+};
+
+export const checkDuplicateProfile = async ({
+  email,
+  phoneNumber,
+  numeroDocumento,
+}: {
+  email: string;
+  phoneNumber: string;
+  numeroDocumento: string;
+}): Promise<{ message: string; data: DuplicateCheckResult; error: boolean }> => {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('email, phone_number, numero_documento')
+      .or(
+        `email.eq.${email},phone_number.eq.${phoneNumber},numero_documento.eq.${numeroDocumento}`
+      );
+
+    if (error) {
+      return { message: error.message, data: { hasDuplicate: false }, error: true };
+    }
+
+    const duplicateEmail = !!data?.find((r) => r.email === email);
+    const duplicatePhone = !!data?.find((r) => r.phone_number === phoneNumber);
+    const duplicateDocument = !!data?.find((r) => r.numero_documento === numeroDocumento);
+
+    return {
+      message: 'OK',
+      data: {
+        hasDuplicate: duplicateEmail || duplicatePhone || duplicateDocument,
+        duplicateEmail,
+        duplicatePhone,
+        duplicateDocument,
+      },
+      error: false,
+    };
+  } catch (error: any | Error) {
+    return { message: error.message, data: { hasDuplicate: false }, error: true };
+  }
+};
+
 export const supabaseAuth = async ({
   email,
   password,
@@ -14,7 +61,6 @@ export const supabaseAuth = async ({
     });
 
     if (error) {
-      // Detectar si es un error de cuenta duplicada
       const isDuplicateError =
         error.message?.toLowerCase().includes('already registered') ||
         error.message?.toLowerCase().includes('user already exists') ||
