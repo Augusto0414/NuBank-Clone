@@ -9,21 +9,21 @@ type RootNavigatorProps = {
 };
 
 const RootNavigator = ({ theme }: RootNavigatorProps) => {
-  const [hasAccount, setHasAccount] = useState<boolean | null>(null);
+  const [hasLogin, setHasLogin] = useState<boolean | null>(null);
 
-  const haveAccount = async (): Promise<boolean> => {
-    const account = await AsyncStorage.getItem('user_email');
-    if (!account) return false;
+  const haveLogin = async (): Promise<boolean> => {
+    const login = await AsyncStorage.getItem('user_email');
+    if (!login) return false;
     return true;
   };
 
   useEffect(() => {
-    haveAccount().then(setHasAccount);
+    haveLogin().then(setHasLogin);
   }, []);
 
-  if (hasAccount === null) return null;
+  if (hasLogin === null) return null;
 
-  return hasAccount ? <AppStack theme={theme} /> : <AuthStack theme={theme} />;
+  return hasLogin ? <AppStack theme={theme} /> : <AuthStack theme={theme} />;
 };
 
 export default RootNavigator;

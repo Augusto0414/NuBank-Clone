@@ -33,7 +33,11 @@ export default function WelcomeView() {
       </View>
 
       <View style={styles.featuresSection}>
-        <Feature icon="flash" title={t('welcome_fast')} description={t('welcome_fast_description')} />
+        <Feature
+          icon="flash"
+          title={t('welcome_fast')}
+          description={t('welcome_fast_description')}
+        />
         <Feature
           icon="shield-checkmark"
           title={t('welcome_secure')}
@@ -55,8 +59,6 @@ export default function WelcomeView() {
           <Text style={styles.secondaryButtonText}>{t('welcome_already_account')}</Text>
         </TouchableOpacity>
       </View>
-
-      <Text style={styles.footer}>{t('welcome_terms')}</Text>
     </ScrollView>
   );
 }
