@@ -19,11 +19,12 @@ const Stack = createStackNavigator();
 const AuthStack = ({ theme }: AuthStackProps) => {
   const [hasEmail, setHasEmail] = useState<boolean | null>(null);
 
+  const checkEmail = async () => {
+    const email = await AsyncStorage.getItem('user_email');
+    setHasEmail(!!email);
+  };
+
   useEffect(() => {
-    const checkEmail = async () => {
-      const email = await AsyncStorage.getItem('user_email');
-      setHasEmail(!!email);
-    };
     checkEmail();
   }, []);
 

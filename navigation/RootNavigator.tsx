@@ -1,6 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Theme } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useAuth } from 'hooks/useAuth';
+import { ActivityIndicator } from 'react-native';
 import AppStack from './AppStack';
 import AuthStack from './AuthStack';
 
@@ -9,21 +9,19 @@ type RootNavigatorProps = {
 };
 
 const RootNavigator = ({ theme }: RootNavigatorProps) => {
-  const [hasLogin, setHasLogin] = useState<boolean | null>(null);
+  const { session, loading } = useAuth();
 
-  const haveLogin = async (): Promise<boolean> => {
-    const login = await AsyncStorage.getItem('user_email');
-    if (!login) return false;
-    return true;
-  };
+  if (loading !== 'succeeded') {
+    return (
+      <ActivityIndicator
+        size="large"
+        color={theme.colors.primary}
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+      />
+    );
+  }
 
-  useEffect(() => {
-    haveLogin().then(setHasLogin);
-  }, []);
-
-  if (hasLogin === null) return null;
-
-  return hasLogin ? <AppStack theme={theme} /> : <AuthStack theme={theme} />;
+  return session ? <AppStack theme={theme} /> : <AuthStack theme={theme} />;
 };
 
 export default RootNavigator;

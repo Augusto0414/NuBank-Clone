@@ -1,22 +1,65 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { HandleBottomSheet } from 'components/BottomSheet';
 import { COLORS } from 'constants/Colors';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SigInService } from 'service/auth/login.service';
+import * as Yup from 'yup';
 const EYE_ICON = require('../../assets/img/eyes.jpg');
 const EYE_OFF_ICON = require('../../assets/img/eyes_close.jpg');
 
 const { GRAY_COLOR, BACKGROUND_COLOR, LIGHT_GRAY, GRAY_ARROW_COLOR } = COLORS;
+const signInService = new SigInService();
+
 const PasswordView = () => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const navigate = useNavigation();
-  const [isActiveBottomSheet, setIsActiveBottomSheet] = useState<boolean>(false);
   const [isPasswordVisisible, setIsPasswordVisisible] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const validateLogin = Yup.object().shape({
+    email: Yup.string().email(t('invalid_email')),
+    password: Yup.string().min(6, t('password_min_length')),
+  });
+
+  const handleSubmit = async () => {
+    console.log('handleSubmit called');
+    setIsLoading(true);
+    try {
+      setErrors({});
+      await validateLogin.validate({ email, password }, { abortEarly: false });
+      const login = await signInService.sigIn(email.trim(), password);
+      if (!login) return;
+
+      await AsyncStorage.setItem('user_email', email.trim());
+
+      navigate.navigate('Home' as never);
+    } catch (error: unknown) {
+      if (error instanceof Yup.ValidationError) {
+        const validationErrors: { email?: string; password?: string } = {};
+        error.inner.forEach((issue) => {
+          if (issue.path && !validationErrors[issue.path as 'email' | 'password']) {
+            validationErrors[issue.path as 'email' | 'password'] = issue.message;
+          }
+        });
+        setErrors(validationErrors);
+        return;
+      }
+      const errorMessage = error instanceof Error ? error.message : 'Error al iniciar sesión';
+      console.error('Login error:', errorMessage);
+      setErrors({ password: errorMessage });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <View
@@ -43,81 +86,62 @@ const PasswordView = () => {
 
       <View style={[styles.inputContainer, { marginTop: 40, marginBottom: 20 }]}>
         <Text style={styles.label}>{t('email')}</Text>
-        <TextInput style={styles.input} keyboardType="default" cursorColor={BACKGROUND_COLOR} />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>{t('password')}</Text>
         <TextInput
           style={styles.input}
           keyboardType="default"
           cursorColor={BACKGROUND_COLOR}
-          secureTextEntry={!isPasswordVisisible}
+          value={email}
+          onChangeText={(value) => {
+            setEmail(value);
+            setErrors((prev) => ({ ...prev, email: undefined }));
+          }}
         />
-
-        <TouchableOpacity
-          style={styles.eyeButton}
-          activeOpacity={0.7}
-          onPress={() => {
-            setIsPasswordVisisible(!isPasswordVisisible);
-          }}>
-          <Image
-            source={isPasswordVisisible ? EYE_ICON : EYE_OFF_ICON}
-            style={styles.eyeIcon}
-            resizeMode="contain"
+        {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>{t('password')}</Text>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.input}
+            keyboardType="default"
+            cursorColor={BACKGROUND_COLOR}
+            secureTextEntry={!isPasswordVisisible}
+            onChangeText={(value) => {
+              setPassword(value);
+              setErrors((prev) => ({ ...prev, password: undefined }));
+            }}
+            value={password}
+            editable={!isLoading}
           />
-        </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.eyeButton}
+            activeOpacity={0.7}
+            onPress={() => {
+              setIsPasswordVisisible(!isPasswordVisisible);
+            }}
+            disabled={isLoading}>
+            <Image
+              source={isPasswordVisisible ? EYE_ICON : EYE_OFF_ICON}
+              style={styles.eyeIcon}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+        {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
       </View>
 
-      <TouchableOpacity activeOpacity={0.7} style={styles.button}>
-        <Ionicons style={styles.icon} name="arrow-forward" size={28} color="#000" />
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={styles.button}
+        onPress={handleSubmit}
+        disabled={isLoading}>
+        {isLoading ? (
+          <ActivityIndicator size="large" color={GRAY_ARROW_COLOR} />
+        ) : (
+          <Ionicons style={styles.icon} name="arrow-forward" size={28} color="#000" />
+        )}
       </TouchableOpacity>
-
-      <HandleBottomSheet
-        isVisible={isActiveBottomSheet}
-        onClose={() => setIsActiveBottomSheet(false)}>
-        <View style={{ paddingVertical: 30 }}>
-          <Text style={{ fontSize: 30, fontWeight: '600', color: '#000' }}>
-            {t('reset_password')}
-          </Text>
-          <Text style={{ fontSize: 18, marginTop: 10, color: '#666' }}>
-            {t('reset_password_info')}
-          </Text>
-          <View>
-            <TouchableOpacity
-              style={{
-                marginTop: 30,
-                backgroundColor: BACKGROUND_COLOR,
-                paddingVertical: 15,
-                borderRadius: 30,
-                alignItems: 'center',
-              }}
-              activeOpacity={0.7}
-              onPress={() => {
-                setIsActiveBottomSheet(false);
-              }}>
-              <Text style={{ color: '#fff', fontSize: 14, fontWeight: '600' }}>
-                {t('button_submit')}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                marginTop: 15,
-                paddingVertical: 15,
-                borderRadius: 30,
-                alignItems: 'center',
-                backgroundColor: LIGHT_GRAY,
-              }}
-              activeOpacity={0.7}
-              onPress={() => {
-                setIsActiveBottomSheet(false);
-              }}>
-              <Text style={{ color: '#000', fontSize: 14, fontWeight: '600' }}>
-                {t('button_cancel')}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </HandleBottomSheet>
     </View>
   );
 };
@@ -136,6 +160,11 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     alignItems: 'flex-start',
+  },
+  inputWrapper: {
+    width: '100%',
+    position: 'relative',
+    marginBottom: 6,
   },
   label: {
     width: '100%',
@@ -165,13 +194,11 @@ const styles = StyleSheet.create({
     height: 70,
     marginTop: 40,
     backgroundColor: LIGHT_GRAY,
-    borderRadius: '100%',
-  },
-  icon: {
+    borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 21,
-    marginLeft: 21,
+  },
+  icon: {
     color: GRAY_ARROW_COLOR,
   },
   eyeIcon: {
@@ -181,6 +208,11 @@ const styles = StyleSheet.create({
   eyeButton: {
     position: 'absolute',
     right: 0,
-    bottom: 10,
+    top: 15,
+  },
+  errorText: {
+    marginTop: 6,
+    color: '#d00000',
+    fontSize: 13,
   },
 });
