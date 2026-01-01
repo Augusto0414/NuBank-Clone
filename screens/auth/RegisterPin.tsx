@@ -1,9 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { FormField } from 'components/FormField';
 import { showToast } from 'components/Toast';
 import { COLORS } from 'constants/Colors';
 import { useFormik } from 'formik';
+import { hasNullOrEmptyValues } from 'helpers/hasNullOrEmptyValues';
+import { rollbackUserCreation } from 'helpers/rollbackUserCreation';
 import { useRegister } from 'hooks/useRegister';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,10 +25,9 @@ import {
   createProfile,
   supabaseAuth,
 } from 'service/auth/register.service';
-import { supabase } from 'utils/supabase';
 import * as Yup from 'yup';
 
-const { BACKGROUND_COLOR, GRAY_COLOR, WHITE, LIGHT_GRAY } = COLORS;
+const { BACKGROUND_COLOR, WHITE, LIGHT_GRAY } = COLORS;
 const RegisterPin = () => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
@@ -43,75 +43,70 @@ const RegisterPin = () => {
     validationSchema: validateFormik,
 
     onSubmit: async (values) => {
+      setIsLoader(true);
+
       try {
-        setIsLoader(true);
-        createUser({ pin: values.pin });
-        const duplicate = await checkDuplicateProfile({
-          email: userRegister?.email!,
-          phoneNumber: userRegister?.phoneNumber!,
-          numeroDocumento: userRegister?.numeroDocumento!,
-        });
-
-        if (!duplicate.error && duplicate.data.hasDuplicate) {
-          const { duplicateEmail, duplicatePhone } = duplicate.data;
-          const message = duplicateEmail
-            ? t('duplicate_email')
-            : duplicatePhone
-              ? t('duplicate_phone')
-              : t('duplicate_document');
-
-          showToast({ title: t('error'), message });
+        if (!userRegister) {
+          showToast({ title: t('error'), message: t('unexpected_error') });
           return;
         }
+
+        if (hasNullOrEmptyValues(userRegister)) {
+          showToast({
+            title: t('error'),
+            message: t('complete_all_fields'),
+          });
+          return;
+        }
+
+        const { numeroDocumento, email, phoneNumber, passWord, name, lastName } = userRegister;
+
+        createUser({ pin: values.pin });
+
+        const duplicate = await checkDuplicateProfile({
+          email,
+          phoneNumber,
+          numeroDocumento,
+        });
+
+        if (duplicate.data?.hasDuplicate) {
+          showToast({ title: t('error'), message: t('duplicate_document') });
+          return;
+        }
+
         const authResult = await supabaseAuth({
-          email: userRegister?.email!,
-          password: userRegister?.passWord!,
+          email,
+          password: passWord,
         });
 
         if (authResult.error) {
-          const errorMessage =
-            authResult.errorCode === 'DUPLICATE_ACCOUNT'
-              ? t('existing_account')
-              : authResult.message;
-
-          showToast({
-            title: t('error'),
-            message: errorMessage,
-          });
-          return;
-        }
-        await AsyncStorage.setItem('user_email', userRegister?.email!);
-        const accountResult = await createAccount({
-          userID: authResult.user.id,
-          pin: values.pin,
-        });
-
-        if (accountResult.error) {
-          await AsyncStorage.removeItem('user_email');
-          await supabase.auth.admin.deleteUser(authResult.user.id);
-          showToast({
-            title: t('error'),
-            message: accountResult.message,
-          });
+          showToast({ title: t('error'), message: authResult.message });
           return;
         }
 
         const profileResult = await createProfile({
-          email: userRegister?.email!,
-          userID: authResult.user.id,
-          name: userRegister?.name!,
-          lastName: userRegister?.lastName!,
-          phoneNumber: userRegister?.phoneNumber!,
-          numeroDocumento: userRegister?.numeroDocumento!,
+          numeroDocumento,
+          authUserId: authResult.user.id,
+          name,
+          lastName,
+          email,
+          phoneNumber,
         });
 
         if (profileResult.error) {
-          await supabase.from('accounts').delete().eq('user_id', authResult.user.id);
-          await supabase.auth.admin.deleteUser(authResult.user.id);
-          showToast({
-            title: t('error'),
-            message: profileResult.message,
-          });
+          await rollbackUserCreation(authResult.user.id, numeroDocumento);
+          showToast({ title: t('error'), message: profileResult.message! });
+          return;
+        }
+
+        const accountResult = await createAccount({
+          numeroDocumento,
+          pin: values.pin,
+        });
+
+        if (accountResult.error) {
+          await rollbackUserCreation(authResult.user.id, numeroDocumento);
+          showToast({ title: t('error'), message: accountResult.message! });
           return;
         }
 
@@ -119,6 +114,7 @@ const RegisterPin = () => {
           title: t('success'),
           message: t('registration_complete'),
         });
+
         navigation.navigate('Login' as never);
       } catch (error: any) {
         showToast({

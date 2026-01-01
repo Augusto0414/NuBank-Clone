@@ -28,21 +28,17 @@ export const checkDuplicateProfile = async ({
       return { message: error.message, data: { hasDuplicate: false }, error: true };
     }
 
-    const duplicateEmail = !!data?.find((r) => r.email === email);
-    const duplicatePhone = !!data?.find((r) => r.phone_number === phoneNumber);
-    const duplicateDocument = !!data?.find((r) => r.numero_documento === numeroDocumento);
-
     return {
       message: 'OK',
       data: {
-        hasDuplicate: duplicateEmail || duplicatePhone || duplicateDocument,
-        duplicateEmail,
-        duplicatePhone,
-        duplicateDocument,
+        hasDuplicate: data.length > 0,
+        duplicateEmail: data.some((r) => r.email === email),
+        duplicatePhone: data.some((r) => r.phone_number === phoneNumber),
+        duplicateDocument: data.some((r) => r.numero_documento === numeroDocumento),
       },
       error: false,
     };
-  } catch (error: any | Error) {
+  } catch (error: any) {
     return { message: error.message, data: { hasDuplicate: false }, error: true };
   }
 };
@@ -82,56 +78,52 @@ export const supabaseAuth = async ({
 };
 
 export const createAccount = async ({
-  userID,
+  numeroDocumento,
   pin,
 }: {
-  userID: string;
+  numeroDocumento: string;
   pin: string;
-}): Promise<{ message: string; account: any; error: boolean }> => {
-  try {
-    const { error, data } = await supabase.from('accounts').insert({
-      user_id: userID,
-      pin_hash: pin,
-      balance: 0,
-    });
-    if (error) {
-      return { message: error.message, account: null, error: true };
-    }
-    return { message: 'Profile created successfully', account: data, error: false };
-  } catch (error: any | Error) {
-    return { message: error.message, account: null, error: true };
+}) => {
+  const { error, data } = await supabase.from('accounts').insert({
+    user_id: numeroDocumento,
+    pin_hash: pin,
+    balance: 0,
+  });
+
+  if (error) {
+    return { error: true, message: error.message };
   }
+
+  return { error: false, account: data };
 };
 
 export const createProfile = async ({
-  userID,
+  numeroDocumento,
+  authUserId,
   name,
   lastName,
-  phoneNumber,
   email,
-  numeroDocumento,
+  phoneNumber,
 }: {
-  userID: string;
+  numeroDocumento: string;
+  authUserId: string;
   name: string;
   lastName: string;
   email: string;
   phoneNumber: string;
-  numeroDocumento: string;
-}): Promise<{ message: string; profile: any; error: boolean }> => {
-  try {
-    const { data, error } = await supabase.from('profiles').insert({
-      id: userID,
-      name: name,
-      last_name: lastName,
-      email: email,
-      phone_number: phoneNumber,
-      numero_documento: numeroDocumento,
-    });
-    if (error) {
-      return { message: error.message, profile: null, error: true };
-    }
-    return { message: 'Profile created successfully', profile: data, error: false };
-  } catch (error: Error | any) {
-    return { message: error.message, profile: null, error: true };
+}) => {
+  const { error, data } = await supabase.from('profiles').insert({
+    numero_documento: numeroDocumento,
+    auth_user_id: authUserId,
+    name,
+    last_name: lastName,
+    email,
+    phone_number: phoneNumber,
+  });
+
+  if (error) {
+    return { error: true, message: error.message };
   }
+
+  return { error: false, profile: data };
 };
