@@ -101,5 +101,6 @@
     "welcome_already_account": "Ya tengo cuenta",
     "welcome_terms": "Al continuar, aceptas nuestros términos y condiciones",
     "email": "Correo electrónico",
-    "password": "Contraseña"
+    "password": "Contraseña",
+    "unexpected_error": "Ocurrió un error inesperado."
 }

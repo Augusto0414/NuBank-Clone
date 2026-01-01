@@ -95,7 +95,7 @@ const RegisterPin = () => {
 
         if (profileResult.error) {
           await rollbackUserCreation(authResult.user.id, numeroDocumento);
-          showToast({ title: t('error'), message: profileResult.message! });
+          showToast({ title: t('error'), message: profileResult.message ?? t('unexpected_error') });
           return;
         }
 
@@ -106,7 +106,7 @@ const RegisterPin = () => {
 
         if (accountResult.error) {
           await rollbackUserCreation(authResult.user.id, numeroDocumento);
-          showToast({ title: t('error'), message: accountResult.message! });
+          showToast({ title: t('error'), message: accountResult.message ?? t('unexpected_error') });
           return;
         }
 

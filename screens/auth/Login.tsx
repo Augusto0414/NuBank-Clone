@@ -40,8 +40,6 @@ const PasswordView = () => {
       if (!login) return;
 
       await AsyncStorage.setItem('user_email', email.trim());
-
-      navigate.navigate('Home' as never);
     } catch (error: unknown) {
       if (error instanceof Yup.ValidationError) {
         const validationErrors: { email?: string; password?: string } = {};
