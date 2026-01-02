@@ -87,7 +87,7 @@
     "error_pin": "Error al crear el PIN. Por favor, inténtalo de nuevo.{{error}}",
     "duplicate_email": "El correo ya está registrado",
     "duplicate_phone": "El teléfono ya está registrado",
-    "duplicate_document": "El documento ya está registrado",
+    "duplicate_document": "Alguno de estos datos ya fueron registrados verifica e intenta de nuevo",
     "registration_complete": "¡Registro completo!",
     "welcome_title": "Bienvenido a Nu",
     "welcome_subtitle": "Tu banco digital en tu bolsillo",

@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'constants/Colors';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { supabase } from 'utils/supabase';
 
 const { DARK_BLACK } = COLORS;
 
@@ -22,7 +23,10 @@ export const useCircleActionButtons = (): HomeAction[] => {
       key: 'deposit',
       icon: <Ionicons name="wallet-outline" size={24} color={DARK_BLACK} />,
       titleKey: 'deposit',
-      onPress: () => {},
+      onPress: async () => {
+        console.log('Deposit pressed');
+        await supabase.auth.signOut();
+      },
     },
     {
       key: 'send',

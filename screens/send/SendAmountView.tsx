@@ -1,13 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import { useContext } from 'react';
+import { useSendMoneyByPhone } from 'hooks/useSendMoneyByPhone';
 import { useTranslation } from 'react-i18next';
 import { FormStepView } from './components/FormStepView';
-import { SendMoneyContext } from './hooks/SendContext';
 
 const SendAmountView = () => {
   const { t } = useTranslation();
   const route = useNavigation();
-  const { setAmount } = useContext(SendMoneyContext);
+  const { setAmount } = useSendMoneyByPhone();
   const handleAmount = (amount: string) => {
     const numericValue = parseFloat(amount);
     if (!isNaN(numericValue)) {

@@ -7,8 +7,9 @@ export const sendMoneyByPhone = async ({
   phoneNumber: string;
   amount: number;
 }) => {
+  const phone = '+57'.concat(phoneNumber);
   const { error } = await supabase.rpc('transfer_money_by_phone', {
-    receiver_phone: phoneNumber,
+    receiver_phone: phone,
     amount,
   });
 

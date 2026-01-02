@@ -1,15 +1,17 @@
+import { useNavigation } from '@react-navigation/native';
 import { formatMoney } from 'helpers/formarMonet';
-import React, { useContext } from 'react';
+import { useSendMoneyByPhone } from 'hooks/useSendMoneyByPhone';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormStepView } from './components/FormStepView';
-import { SendMoneyContext } from './hooks/SendContext';
 
 const ConfirmSend = () => {
   const { t } = useTranslation();
-  const { amount, plateNumber, setReason } = useContext(SendMoneyContext);
-
-  const handleSubmit = (reason: string) => {
-    setReason(reason);
+  const { setReason, amount, plateNumber, loading, sendMoneyByPhone } = useSendMoneyByPhone();
+  const navigate = useNavigation();
+  const handleSubmit = async (reason: string) => {
+    setReason?.(reason || '');
+    await sendMoneyByPhone();
   };
 
   return (
@@ -20,9 +22,13 @@ const ConfirmSend = () => {
       buttonText={t('confirm_send_button')}
       textInput={t('what_is_reason')}
       userIcon={plateNumber}
+      loading={loading === 'loading'}
       onSubmit={(value) => {
-        console.log('Amount:', value);
-        console.log('Amount:', amount);
+        console.log('press');
+        handleSubmit(value);
+        if (loading === 'succeeded') {
+          navigate.navigate('Home' as never);
+        }
       }}
     />
   );

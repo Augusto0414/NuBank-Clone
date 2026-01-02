@@ -3,7 +3,6 @@ import { FormField } from 'components/FormField';
 import { showToast } from 'components/Toast';
 import { COLORS } from 'constants/Colors';
 import { useFormik } from 'formik';
-import { hasNullOrEmptyValues } from 'helpers/hasNullOrEmptyValues';
 import { rollbackUserCreation } from 'helpers/rollbackUserCreation';
 import { useRegister } from 'hooks/useRegister';
 import { useState } from 'react';
@@ -48,14 +47,6 @@ const RegisterPin = () => {
       try {
         if (!userRegister) {
           showToast({ title: t('error'), message: t('unexpected_error') });
-          return;
-        }
-
-        if (hasNullOrEmptyValues(userRegister)) {
-          showToast({
-            title: t('error'),
-            message: t('complete_all_fields'),
-          });
           return;
         }
 

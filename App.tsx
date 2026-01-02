@@ -6,10 +6,10 @@ import './global.css';
 import './i18n';
 
 import { AuthProvider } from 'context/AuthContex';
+import { SendMoneyByPhoneProvider } from 'context/sendMoney';
 import { UseRegisterProvider } from 'context/UseRegister';
 import RootNavigator from 'navigation/RootNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { SendMoneyProvider } from 'screens/send/hooks/SendContext';
 
 export default function App() {
   const colorScheme = useColorScheme();
@@ -19,9 +19,9 @@ export default function App() {
     <SafeAreaProvider>
       <AuthProvider>
         <UseRegisterProvider>
-          <SendMoneyProvider>
+          <SendMoneyByPhoneProvider>
             <RootNavigator theme={theme} />
-          </SendMoneyProvider>
+          </SendMoneyByPhoneProvider>
         </UseRegisterProvider>
       </AuthProvider>
     </SafeAreaProvider>

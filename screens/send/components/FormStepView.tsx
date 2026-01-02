@@ -2,7 +2,14 @@ import { useNavigation } from '@react-navigation/native';
 import { CircleButton } from 'components/CircleButton';
 import { COLORS } from 'constants/Colors';
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -27,6 +34,7 @@ interface FormStepViewProps {
   buttonText?: string;
   textInput?: string;
   userIcon?: string;
+  loading?: boolean;
   onSubmit: (value: string) => void;
 }
 
@@ -43,6 +51,7 @@ export const FormStepView = ({
   onSubmit,
   buttonText,
   userIcon,
+  loading,
 }: FormStepViewProps) => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
@@ -129,8 +138,16 @@ export const FormStepView = ({
           />
         </View>
       ) : (
-        <TouchableOpacity style={styles.btnSend} onPress={() => onSubmit(value)}>
-          <Text style={styles.textBtnSend}>{buttonText}</Text>
+        <TouchableOpacity style={styles.btnSend} onPress={() => onSubmit(value)} disabled={loading}>
+          {loading ? (
+            <ActivityIndicator
+              size="small"
+              color={DARK_BUTON_TEXT_COLOR}
+              style={{ alignSelf: 'center' }}
+            />
+          ) : (
+            <Text style={styles.textBtnSend}>{buttonText}</Text>
+          )}
         </TouchableOpacity>
       )}
     </View>
@@ -184,6 +201,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 15,
     alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 30,
     position: 'absolute',
     bottom: 50,

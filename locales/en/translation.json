@@ -88,7 +88,7 @@
     "existing_account": "Existing account",
     "duplicate_email": "Email is already registered",
     "duplicate_phone": "Phone number is already registered",
-    "duplicate_document": "Document number is already registered",
+    "duplicate_document": "Some of these data have already been registered, please check and try again",
     "registration_complete": "Registration complete!",
     "welcome_title": "Welcome to Nu",
     "welcome_subtitle": "Your digital bank in your pocket",
