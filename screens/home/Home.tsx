@@ -1,9 +1,10 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { Button } from 'components/Button';
 import { CardInfo } from 'components/CardInfo';
 import { CircleButton } from 'components/CircleButton';
 import { COLORS } from 'constants/Colors';
 import { formatMoney } from 'helpers/formarMonet';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -85,9 +86,12 @@ const Home = () => {
       setLoadingBalance(false);
     }
   };
-  useEffect(() => {
-    loadBalance();
-  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadBalance();
+    }, [])
+  );
 
   return (
     <View style={{ flex: 1, paddingBottom: insets.bottom }}>

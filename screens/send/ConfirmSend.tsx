@@ -11,7 +11,12 @@ const ConfirmSend = () => {
   const navigate = useNavigation();
   const handleSubmit = async (reason: string) => {
     setReason?.(reason || '');
-    await sendMoneyByPhone();
+    await sendMoneyByPhone().catch((error) => {
+      throw new Error('Send Money Failed', error);
+    });
+    if (loading === 'succeeded') {
+      navigate.navigate('Home' as never);
+    }
   };
 
   return (
@@ -26,9 +31,6 @@ const ConfirmSend = () => {
       onSubmit={(value) => {
         console.log('press');
         handleSubmit(value);
-        if (loading === 'succeeded') {
-          navigate.navigate('Home' as never);
-        }
       }}
     />
   );
