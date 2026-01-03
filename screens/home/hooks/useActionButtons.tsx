@@ -15,7 +15,9 @@ export const useActionButtons = (): ButtonAction[] => {
       key: i18n.t('detail_account'),
       iconName: 'receipt-outline',
       title: i18n.t('detail_account'),
-      onPress: () => {},
+      onPress: () => {
+        navigation.navigate('DetailView' as never);
+      },
     },
     {
       key: i18n.t('my_cards'),

@@ -102,5 +102,8 @@
     "welcome_terms": "Al continuar, aceptas nuestros términos y condiciones",
     "email": "Correo electrónico",
     "password": "Contraseña",
-    "unexpected_error": "Ocurrió un error inesperado."
+    "unexpected_error": "Ocurrió un error inesperado.",
+    "shared": "Compartir",
+    "copy": "Copiar",
+    "details_user": "Detalles del usuario"
 }

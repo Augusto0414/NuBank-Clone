@@ -103,5 +103,8 @@
     "welcome_terms": "By continuing, you accept our terms and conditions",
     "email": "Email",
     "password": "Password",
-    "unexpected_error": "An unexpected error occurred."
+    "unexpected_error": "An unexpected error occurred.",
+    "shared": "Share",
+    "copy": "Copy",
+    "details_user": "User Details"
 }
