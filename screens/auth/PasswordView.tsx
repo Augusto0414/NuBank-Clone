@@ -1,23 +1,45 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { HandleBottomSheet } from 'components/BottomSheet';
 import { COLORS } from 'constants/Colors';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SigInService } from '../../service/auth/login.service';
 const EYE_ICON = require('../../assets/img/eyes.jpg');
 const EYE_OFF_ICON = require('../../assets/img/eyes_close.jpg');
 
 const { GRAY_COLOR, BACKGROUND_COLOR, LIGHT_GRAY, GRAY_ARROW_COLOR } = COLORS;
+const sigInService = new SigInService();
 const PasswordView = () => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const navigate = useNavigation();
   const [isActiveBottomSheet, setIsActiveBottomSheet] = useState<boolean>(false);
   const [isPasswordVisisible, setIsPasswordVisisible] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>('');
   const handleOpenBottomSheet = () => setIsActiveBottomSheet((prev) => !prev);
+  const login = async ({ password }: { password: string }): Promise<void> => {
+    try {
+      setIsLoading(true);
+      const userEmail = await AsyncStorage.getItem('user_email');
+      if (!userEmail) return;
+      const { user } = await sigInService.sigIn(userEmail, password);
+      if (!user) {
+        throw new Error('Login Failed');
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      throw new Error('Login Failed', error as any);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <View
@@ -48,6 +70,8 @@ const PasswordView = () => {
           keyboardType="default"
           cursorColor={BACKGROUND_COLOR}
           secureTextEntry={!isPasswordVisisible}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
         />
 
         <TouchableOpacity
@@ -77,8 +101,21 @@ const PasswordView = () => {
         />
       </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={0.7} style={styles.button}>
-        <Ionicons style={styles.icon} name="arrow-forward" size={28} color="#000" />
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={styles.button}
+        onPress={() => {
+          login({ password });
+        }}>
+        {isLoading ? (
+          <ActivityIndicator
+            style={{ justifyContent: 'center', alignItems: 'center', marginTop: 18 }}
+            size="large"
+            color="#000"
+          />
+        ) : (
+          <Ionicons style={styles.icon} name="arrow-forward" size={28} color="#000" />
+        )}
       </TouchableOpacity>
 
       <HandleBottomSheet

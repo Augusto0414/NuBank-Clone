@@ -3,12 +3,13 @@ import { CardInfo } from 'components/CardInfo';
 import { CircleButton } from 'components/CircleButton';
 import { COLORS } from 'constants/Colors';
 import { formatMoney } from 'helpers/formarMonet';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { getBalance } from 'service/wallet/wallet.service';
 import { useActionButtons, useCircleActionButtons } from './hooks';
 const BreB = require('../../assets/img/Bre-B.png');
 const { BACKGROUND_COLOR, DARK_BUTON_TEXT_COLOR, LIGHT_WHITHE, GRAY_ARROW_COLOR, GRAY_COLOR } =
@@ -67,6 +68,26 @@ const Home = () => {
     outputRange: [1, 0.5, 0],
     extrapolate: 'clamp',
   });
+
+  const [balance, setBalance] = useState<number | null>(null);
+  const [loadingBalance, setLoadingBalance] = useState(true);
+
+  const loadBalance = async () => {
+    try {
+      setLoadingBalance(true);
+      const { error, balance } = await getBalance();
+      if (!error) setBalance(balance);
+      setLoadingBalance(false);
+    } catch (error) {
+      setLoadingBalance(false);
+      throw error;
+    } finally {
+      setLoadingBalance(false);
+    }
+  };
+  useEffect(() => {
+    loadBalance();
+  }, []);
 
   return (
     <View style={{ flex: 1, paddingBottom: insets.bottom }}>
@@ -133,7 +154,11 @@ const Home = () => {
           <TouchableOpacity style={styles.accountRow}>
             <View>
               <Text style={styles.textButtonAccount}>{t('Savings account')}</Text>
-              <Text style={styles.textButtonAccount}>{formatMoney(10000)}</Text>
+              {loadingBalance ? (
+                <Text style={styles.textButtonAccount}>Cargando...</Text>
+              ) : (
+                <Text style={styles.textButtonAccount}>{formatMoney(balance ?? 0)}</Text>
+              )}
             </View>
             <Ionicons name="chevron-forward" size={22} color={GRAY_ARROW_COLOR} />
           </TouchableOpacity>

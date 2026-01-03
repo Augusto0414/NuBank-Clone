@@ -6,7 +6,7 @@ export const sendMoneyByPhone = async ({
 }: {
   phoneNumber: string;
   amount: number;
-}) => {
+}): Promise<{ error: boolean; message?: string }> => {
   const phone = '+57'.concat(phoneNumber);
   const { error } = await supabase.rpc('transfer_money_by_phone', {
     receiver_phone: phone,
@@ -18,4 +18,18 @@ export const sendMoneyByPhone = async ({
   }
 
   return { error: false };
+};
+
+export const getBalance = async (): Promise<{
+  error: boolean;
+  message?: string;
+  balance?: any;
+}> => {
+  const { data, error } = await supabase.rpc('get_my_balance');
+
+  if (error) {
+    return { error: true, message: error.message };
+  }
+
+  return { error: false, balance: data };
 };
