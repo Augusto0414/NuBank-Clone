@@ -7,9 +7,8 @@ export const sendMoneyByPhone = async ({
   phoneNumber: string;
   amount: number;
 }): Promise<{ error: boolean; message?: string }> => {
-  const phone = '+57'.concat(phoneNumber);
   const { error } = await supabase.rpc('transfer_money_by_phone', {
-    receiver_phone: phone,
+    receiver_phone: phoneNumber,
     amount,
   });
 
