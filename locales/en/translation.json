@@ -106,5 +106,11 @@
     "unexpected_error": "An unexpected error occurred.",
     "shared": "Share",
     "copy": "Copy",
-    "details_user": "User Details"
+    "details_user": "User Details",
+    "copied_to_clipboard": "Copied to clipboard!",
+    "account_info_copied": "Account information copied!",
+    "loading": "Loading...",
+    "cc": "Citizen ID",
+    "nu_plate": "My Nu Plate is",
+    "account_number": "Account number"
 }

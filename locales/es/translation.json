@@ -105,5 +105,11 @@
     "unexpected_error": "Ocurrió un error inesperado.",
     "shared": "Compartir",
     "copy": "Copiar",
-    "details_user": "Detalles del usuario"
+    "details_user": "Detalles del usuario",
+    "copied_to_clipboard": "¡Copiado al portapapeles!",
+    "account_info_copied": "¡Información de la cuenta copiada!",
+    "loading": "Cargando...",
+    "cc": "Cedula de ciudadanía",
+    "nu_plate": "Mi Nu Placa es",
+    "account_number": "Número de cuenta"
 }

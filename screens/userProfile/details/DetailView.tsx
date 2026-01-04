@@ -1,3 +1,5 @@
+import Clipboard from '@react-native-clipboard/clipboard';
+import { showToast } from 'components/Toast';
 import { COLORS } from 'constants/Colors';
 import { AccountContext } from 'context/AccountContext';
 import { useContext } from 'react';
@@ -13,6 +15,16 @@ const DetailView = () => {
   const { t } = useTranslation();
   const { account, loading } = useContext(AccountContext);
 
+  const handleCopyToClipboard = () => {
+    const accountData = {
+      [t('cc')]: account?.profiles.numero_documento || 'N/A',
+      [t('nu_plate')]: account?.profiles.phone_number || 'N/A',
+      [t('account_number')]: account?.profiles.phone_number || 'N/A',
+    };
+    Clipboard.setString(JSON.stringify(accountData));
+    showToast({ title: t('copied_to_clipboard'), message: t('account_info_copied') });
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: insets.bottom }}>
       <View style={[styles.headerContainer]}>
@@ -22,35 +34,39 @@ const DetailView = () => {
           </View>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.userName}>
             {loading
-              ? 'Cargando...'
+              ? t('loading')
               : `${account?.profiles.name} ${account?.profiles.last_name}` || 'N/A'}
           </Text>
 
           <Text style={styles.userInfo}>
-            Cédula de ciudadanía:{' '}
+            {t('cc')}:{' '}
             <Text style={styles.bold}>
-              {loading ? 'Cargando...' : account?.profiles.numero_documento || 'N/A'}
+              {loading ? t('loading') : account?.profiles.numero_documento || 'N/A'}
             </Text>
           </Text>
 
           <Text style={styles.userInfo}>
-            Mi Nu Placa es:{' '}
+            {t('nu_plate')}:{' '}
             <Text style={styles.bold}>
-              {loading ? 'Cargando...' : account?.profiles.phone_number || 'N/A'}
+              {loading ? t('loading') : account?.profiles.phone_number || 'N/A'}
             </Text>
           </Text>
 
           <Text style={styles.sectionTitle}>Cuenta de ahorros Nu Financiera</Text>
 
           <Text style={styles.userInfo}>
-            Número de cuenta:{' '}
+            {t('account_number')}:{' '}
             <Text style={styles.bold}>
-              {loading ? 'Cargando...' : account?.profiles.phone_number || 'N/A'}
+              {loading ? t('loading') : account?.profiles.phone_number || 'N/A'}
             </Text>
           </Text>
 
           <View style={styles.footerHeader}>
-            <TouchableOpacity style={styles.copyButton}>
+            <TouchableOpacity
+              style={styles.copyButton}
+              onPress={() => {
+                handleCopyToClipboard();
+              }}>
               <Ionicons name="copy-outline" size={18} color={WHITE} />
               <Text style={styles.copyText}>{t('copy')}</Text>
             </TouchableOpacity>
