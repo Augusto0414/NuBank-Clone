@@ -1,5 +1,6 @@
 import { COLORS } from 'constants/Colors';
-import { useAuth } from 'hooks/useAuth';
+import { AccountContext } from 'context/AccountContext';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,7 +11,8 @@ const { LIGHT_GRAY, WHITE, DARK_BLACK, BACKGROUND_COLOR } = COLORS;
 const DetailView = () => {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { account, loading } = useContext(AccountContext);
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: insets.bottom }}>
       <View style={[styles.headerContainer]}>
@@ -18,20 +20,33 @@ const DetailView = () => {
           <View style={styles.iconContainer}>
             <Ionicons name="person-outline" size={26} color={DARK_BLACK} />
           </View>
-          <Text style={styles.userName}>{user?.email || 'N/A'}</Text>
-
-          <Text style={styles.userInfo}>
-            Cédula de ciudadanía: <Text style={styles.bold}>3403848459</Text>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.userName}>
+            {loading
+              ? 'Cargando...'
+              : `${account?.profiles.name} ${account?.profiles.last_name}` || 'N/A'}
           </Text>
 
           <Text style={styles.userInfo}>
-            Mi Nu Placa es: <Text style={styles.bold}>3398</Text>
+            Cédula de ciudadanía:{' '}
+            <Text style={styles.bold}>
+              {loading ? 'Cargando...' : account?.profiles.numero_documento || 'N/A'}
+            </Text>
+          </Text>
+
+          <Text style={styles.userInfo}>
+            Mi Nu Placa es:{' '}
+            <Text style={styles.bold}>
+              {loading ? 'Cargando...' : account?.profiles.phone_number || 'N/A'}
+            </Text>
           </Text>
 
           <Text style={styles.sectionTitle}>Cuenta de ahorros Nu Financiera</Text>
 
           <Text style={styles.userInfo}>
-            Número de cuenta: <Text style={styles.bold}>1002938</Text>
+            Número de cuenta:{' '}
+            <Text style={styles.bold}>
+              {loading ? 'Cargando...' : account?.profiles.phone_number || 'N/A'}
+            </Text>
           </Text>
 
           <View style={styles.footerHeader}>
