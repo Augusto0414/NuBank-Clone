@@ -1,8 +1,7 @@
-import Clipboard from '@react-native-clipboard/clipboard';
-import { showToast } from 'components/Toast';
 import { COLORS } from 'constants/Colors';
 import { AccountContext } from 'context/AccountContext';
-import { useContext } from 'react';
+import * as Clipboard from 'expo-clipboard';
+import { useCallback, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,15 +14,17 @@ const DetailView = () => {
   const { t } = useTranslation();
   const { account, loading } = useContext(AccountContext);
 
-  const handleCopyToClipboard = () => {
-    const accountData = {
-      [t('cc')]: account?.profiles.numero_documento || 'N/A',
-      [t('nu_plate')]: account?.profiles.phone_number || 'N/A',
-      [t('account_number')]: account?.profiles.phone_number || 'N/A',
-    };
-    Clipboard.setString(JSON.stringify(accountData));
-    showToast({ title: t('copied_to_clipboard'), message: t('account_info_copied') });
-  };
+  const handleCopyToClipboard = useCallback(() => {
+    const clipboardContent = Object.entries({
+      [t('cc')]: account?.profiles.numero_documento ?? 'N/A',
+      [t('nu_plate')]: account?.profiles.phone_number ?? 'N/A',
+      [t('account_number')]: account?.profiles.phone_number ?? 'N/A',
+    })
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n');
+
+    Clipboard.setStringAsync(clipboardContent);
+  }, [account, t]);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: insets.bottom }}>
