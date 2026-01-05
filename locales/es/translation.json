@@ -111,5 +111,21 @@
     "loading": "Cargando...",
     "cc": "Cedula de ciudadanía",
     "nu_plate": "Mi Nu Placa es",
-    "account_number": "Número de cuenta"
+    "account_number": "Número de cuenta",
+    "search_motion": "Buscar movimiento",
+    "sent_to": "Enviaste a",
+    "received_from": "Retiraste dinero de tu Cajita",
+    "biometric_auth_title": "Autenticación",
+    "biometric_auth_message": "Autentícate para acceder a tu cuenta",
+    "biometric_no_account_title": "Cuenta no encontrada",
+    "biometric_no_account_message": "Por favor, usa la autenticación por contraseña primero para configurar el inicio de sesión biométrico.",
+    "biometric_auth_failed_title": "Autenticación fallida",
+    "biometric_auth_failed_message": "La autenticación biométrica no fue exitosa. Por favor, inténtalo de nuevo o usa tu contraseña.",
+    "biometric_success_title": "Éxito",
+    "biometric_success_message": "¡Autenticación biométrica exitosa!",
+    "biometric_error_title": "Error",
+    "biometric_error_message": "Ocurrió un error durante la autenticación biométrica.",
+    "use_password": "Usar contraseña",
+    "try_again": "Intentar de nuevo",
+    "ok": "OK"
 }

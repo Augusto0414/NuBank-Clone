@@ -6,6 +6,7 @@ import i18n from 'i18n';
 import { TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from 'screens/home/Home';
+import MotionView from 'screens/motion/MotionView';
 import ConfirmSend from 'screens/send/ConfirmSend';
 import PlateView from 'screens/send/PlateView';
 import SendAmountView from 'screens/send/SendAmountView';
@@ -19,7 +20,7 @@ type AppStackProps = {
 const Stack = createStackNavigator();
 
 const AppStack = ({ theme }: AppStackProps) => {
-  const { LIGHT_GRAY } = COLORS;
+  const { WHITE, LIGHT_GRAY } = COLORS;
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator initialRouteName="Home">
@@ -54,6 +55,26 @@ const AppStack = ({ theme }: AppStackProps) => {
           })}
         />
 
+        <Stack.Screen
+          name="MotionView"
+          component={MotionView}
+          options={({ navigation }) => ({
+            title: '',
+            headerStyle: {
+              backgroundColor: WHITE,
+              elevation: 0,
+              shadowOpacity: 0,
+              borderBottomWidth: 0,
+            },
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={{ paddingHorizontal: 12 }}>
+                <Ionicons name="chevron-back-outline" size={26} color="#000" />
+              </TouchableOpacity>
+            ),
+          })}
+        />
         <Stack.Screen name="ConfirmSend" component={ConfirmSend} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>

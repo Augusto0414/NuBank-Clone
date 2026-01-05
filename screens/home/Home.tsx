@@ -1,4 +1,4 @@
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Button } from 'components/Button';
 import { CardInfo } from 'components/CardInfo';
 import { CircleButton } from 'components/CircleButton';
@@ -72,7 +72,7 @@ const Home = () => {
 
   const [balance, setBalance] = useState<number | null>(null);
   const [loadingBalance, setLoadingBalance] = useState(true);
-
+  const navigate = useNavigation();
   const loadBalance = async () => {
     try {
       setLoadingBalance(true);
@@ -155,7 +155,9 @@ const Home = () => {
           useNativeDriver: false,
         })}>
         <View style={styles.buttonAccount}>
-          <TouchableOpacity style={styles.accountRow}>
+          <TouchableOpacity
+            style={styles.accountRow}
+            onPress={() => navigate.navigate('MotionView' as never)}>
             <View>
               <Text style={styles.textButtonAccount}>{t('Savings account')}</Text>
               {loadingBalance ? (

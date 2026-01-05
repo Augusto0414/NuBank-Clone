@@ -1,3 +1,4 @@
+import { Transaction } from 'interfaces/wallet';
 import { supabase } from 'utils/supabase';
 
 export const sendMoneyByPhone = async ({
@@ -31,4 +32,18 @@ export const getBalance = async (): Promise<{
   }
 
   return { error: false, balance: data };
+};
+
+export const getTransactionHistory = async (): Promise<{
+  error: boolean;
+  data?: Transaction[];
+  message?: string;
+}> => {
+  const { data, error } = await supabase.rpc('get_transaction_history');
+  console.log('getTransactionHistory - data:', data);
+  if (error) {
+    return { error: true, message: error.message };
+  }
+
+  return { error: false, data };
 };

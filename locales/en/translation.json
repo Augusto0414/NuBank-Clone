@@ -112,5 +112,21 @@
     "loading": "Loading...",
     "cc": "Citizen ID",
     "nu_plate": "My Nu Plate is",
-    "account_number": "Account number"
+    "account_number": "Account number",
+    "search_motion": "Search movement",
+    "sent_to": "Sent to",
+    "received_from": "Withdrew money from your Cajita",
+    "biometric_auth_title": "Authentication",
+    "biometric_auth_message": "Authenticate to access your account",
+    "biometric_no_account_title": "No account found",
+    "biometric_no_account_message": "Please use password authentication first to set up biometric login.",
+    "biometric_auth_failed_title": "Authentication Failed",
+    "biometric_auth_failed_message": "Biometric authentication was not successful. Please try again or use password.",
+    "biometric_success_title": "Success",
+    "biometric_success_message": "Biometric authentication successful!",
+    "biometric_error_title": "Error",
+    "biometric_error_message": "An error occurred during biometric authentication.",
+    "use_password": "Use Password",
+    "try_again": "Try Again",
+    "ok": "OK"
 }

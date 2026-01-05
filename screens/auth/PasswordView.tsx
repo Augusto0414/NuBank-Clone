@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { HandleBottomSheet } from 'components/BottomSheet';
 import { COLORS } from 'constants/Colors';
+import * as SecureStore from 'expo-secure-store';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -32,6 +33,7 @@ const PasswordView = () => {
       if (!user) {
         throw new Error('Login Failed');
       }
+      await SecureStore.setItemAsync('user_password', password);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
