@@ -77,53 +77,34 @@ export const supabaseAuth = async ({
   }
 };
 
-export const createAccount = async ({
-  numeroDocumento,
-  pin,
-}: {
-  numeroDocumento: string;
-  pin: string;
-}) => {
-  const { error, data } = await supabase.from('accounts').insert({
-    user_id: numeroDocumento,
-    pin_hash: pin,
-    balance: 0,
-  });
-
-  if (error) {
-    return { error: true, message: error.message };
-  }
-
-  return { error: false, account: data };
-};
-
-export const createProfile = async ({
-  numeroDocumento,
+export const completeSignUp = async ({
   authUserId,
+  numeroDocumento,
   name,
   lastName,
   email,
   phoneNumber,
+  pin,
 }: {
+  authUserId?: string;
   numeroDocumento: string;
-  authUserId: string;
   name: string;
   lastName: string;
   email: string;
   phoneNumber: string;
-}) => {
-  const { error, data } = await supabase.from('profiles').insert({
-    numero_documento: numeroDocumento,
-    auth_user_id: authUserId,
-    name,
-    last_name: lastName,
-    email,
-    phone_number: phoneNumber,
+  pin: string;
+}): Promise<{ error: boolean; message?: string }> => {
+  const { error } = await supabase.rpc('complete_signup', {
+    p_auth_user_id: authUserId,
+    p_numero_documento: numeroDocumento,
+    p_name: name,
+    p_last_name: lastName,
+    p_email: email,
+    p_phone: phoneNumber,
+    p_pin_hash: pin,
   });
-
   if (error) {
     return { error: true, message: error.message };
   }
-
-  return { error: false, profile: data };
+  return { error: false };
 };

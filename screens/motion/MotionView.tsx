@@ -71,16 +71,16 @@ const MotionView = () => {
         <View style={style.transactionItem}>
           <View style={style.transactionInfo}>
             <Text style={style.transactionType}>
-              {item.type === 'OUT' ? t('sent_to') : t('received_from')} {item.counterparty}
+              {item.direction === 'OUT' ? t('sent_to') : t('received_from')} {item.counterparty}
             </Text>
             <Text style={style.transactionDate}>{formatDate(item.created_at)}</Text>
           </View>
           <Text
             style={[
               style.transactionAmount,
-              item.type === 'OUT' ? style.amountOut : style.amountIn,
+              item.direction === 'OUT' ? style.amountOut : style.amountIn,
             ]}>
-            {item.type === 'OUT' ? '-' : '+'}
+            {item.direction === 'OUT' ? '-' : '+'}
             {formatMoney(item.amount)}
           </Text>
         </View>

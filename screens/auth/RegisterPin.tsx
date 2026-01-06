@@ -3,7 +3,6 @@ import { FormField } from 'components/FormField';
 import { showToast } from 'components/Toast';
 import { COLORS } from 'constants/Colors';
 import { useFormik } from 'formik';
-import { rollbackUserCreation } from 'helpers/rollbackUserCreation';
 import { useRegister } from 'hooks/useRegister';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,12 +17,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {
-  checkDuplicateProfile,
-  createAccount,
-  createProfile,
-  supabaseAuth,
-} from 'service/auth/register.service';
+import { checkDuplicateProfile, completeSignUp, supabaseAuth } from 'service/auth/register.service';
 import * as Yup from 'yup';
 
 const { BACKGROUND_COLOR, WHITE, LIGHT_GRAY } = COLORS;
@@ -70,34 +64,26 @@ const RegisterPin = () => {
           password: passWord,
         });
 
-        if (authResult.error) {
+        if (authResult.error || !authResult.user) {
           showToast({ title: t('error'), message: authResult.message });
           return;
         }
 
-        const profileResult = await createProfile({
-          numeroDocumento,
+        const signupResult = await completeSignUp({
           authUserId: authResult.user.id,
+          numeroDocumento,
           name,
           lastName,
           email,
           phoneNumber,
-        });
-
-        if (profileResult.error) {
-          await rollbackUserCreation(authResult.user.id, numeroDocumento);
-          showToast({ title: t('error'), message: profileResult.message ?? t('unexpected_error') });
-          return;
-        }
-
-        const accountResult = await createAccount({
-          numeroDocumento,
           pin: values.pin,
         });
 
-        if (accountResult.error) {
-          await rollbackUserCreation(authResult.user.id, numeroDocumento);
-          showToast({ title: t('error'), message: accountResult.message ?? t('unexpected_error') });
+        if (signupResult.error) {
+          showToast({
+            title: t('error'),
+            message: signupResult.message ?? t('unexpected_error'),
+          });
           return;
         }
 

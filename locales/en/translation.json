@@ -115,7 +115,7 @@
     "account_number": "Account number",
     "search_motion": "Search movement",
     "sent_to": "Sent to",
-    "received_from": "Withdrew money from your Cajita",
+    "received_from": "You received money",
     "biometric_auth_title": "Authentication",
     "biometric_auth_message": "Authenticate to access your account",
     "biometric_no_account_title": "No account found",

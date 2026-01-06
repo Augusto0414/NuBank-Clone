@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'constants/Colors';
 import * as SecureStore from 'expo-secure-store';
 import { useLocalAuth } from 'hooks/useLocalAuth';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -21,13 +21,14 @@ const AuthView = () => {
   const { authenticate, isAuthenticating, checkSupport } = useLocalAuth();
   const [isBiometricSupported, setIsBiometricSupported] = useState<boolean>(false);
 
-  useEffect(() => {
-    const checkBiometricSupport = async () => {
-      const supported = await checkSupport();
-      setIsBiometricSupported(supported);
-    };
-    checkBiometricSupport();
+  const checkBiometricSupport = useCallback(async () => {
+    const supported = await checkSupport();
+    setIsBiometricSupported(supported);
   }, [checkSupport]);
+
+  useEffect(() => {
+    checkBiometricSupport();
+  }, [checkBiometricSupport]);
 
   const handleBiometricLogin = async () => {
     try {
@@ -75,7 +76,7 @@ const AuthView = () => {
       <View style={styles.buttomContainer}>
         <TouchableOpacity
           activeOpacity={0.7}
-          disabled={isAuthenticating}
+          disabled={isAuthenticating || !isBiometricSupported}
           onPress={handleBiometricLogin}>
           {isAuthenticating ? (
             <View
@@ -86,7 +87,9 @@ const AuthView = () => {
               <ActivityIndicator color="#000" />
             </View>
           ) : (
-            <Text style={styles.buttomLogin}>{t('login_button')}</Text>
+            <Text style={[styles.buttomLogin, !isBiometricSupported && { opacity: 0.5 }]}>
+              {t('login_button')}
+            </Text>
           )}
         </TouchableOpacity>
 

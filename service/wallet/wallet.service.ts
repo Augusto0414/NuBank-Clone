@@ -40,7 +40,6 @@ export const getTransactionHistory = async (): Promise<{
   message?: string;
 }> => {
   const { data, error } = await supabase.rpc('get_transaction_history');
-  console.log('getTransactionHistory - data:', data);
   if (error) {
     return { error: true, message: error.message };
   }
