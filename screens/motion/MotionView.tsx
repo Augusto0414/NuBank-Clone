@@ -1,11 +1,14 @@
+import { COLORS } from 'constants/Colors';
 import { formatMoney } from 'helpers/formarMonet';
 import { Transaction } from 'interfaces/wallet';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTransactionStore } from 'store/store';
 
+const { WHITE, GRAY_COLOR, LIGHT_GRAY, DARK_BLACK, LIGHT_GREEN, DARK_GREEN } = COLORS;
 const MotionView = () => {
   const insets = useSafeAreaInsets();
 
@@ -49,6 +52,18 @@ const MotionView = () => {
     return `${day} ${month} - ${time}`;
   };
 
+  const renderSearchInput = (
+    <View style={[style.searchInputContainer, { marginBottom: 10 }]}>
+      <Ionicons style={style.searchIcon} name="search" size={24} color={GRAY_COLOR} />
+      <TextInput
+        placeholder={t('search_motion')}
+        value={searchText}
+        onChangeText={handleFilterChange}
+        style={style.searchInput}
+      />
+    </View>
+  );
+
   return (
     <FlatList
       style={style.list}
@@ -59,14 +74,7 @@ const MotionView = () => {
       }}
       data={filteredTransactions}
       keyExtractor={(item) => item.id.toString()}
-      ListHeaderComponent={
-        <TextInput
-          placeholder={t('search_motion')}
-          value={searchText}
-          onChangeText={handleFilterChange}
-          style={style.searchInput}
-        />
-      }
+      ListHeaderComponent={renderSearchInput}
       renderItem={({ item }) => (
         <View style={style.transactionItem}>
           <View style={style.transactionInfo}>
@@ -90,13 +98,24 @@ const MotionView = () => {
 };
 const style = StyleSheet.create({
   list: {
+    backgroundColor: WHITE,
     flex: 1,
   },
-  searchInput: {
-    backgroundColor: '#F5F5F5',
-    borderRadius: 8,
-    padding: 12,
+  searchInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: LIGHT_GRAY,
+    borderRadius: 32,
     marginBottom: 16,
+    paddingHorizontal: 12,
+  },
+  searchIcon: {
+    marginRight: 8,
+    marginLeft: 4,
+  },
+  searchInput: {
+    width: '100%',
+    padding: 10,
     fontSize: 16,
   },
   transactionItem: {
@@ -105,7 +124,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: GRAY_COLOR,
   },
   transactionInfo: {
     flex: 1,
@@ -113,22 +132,21 @@ const style = StyleSheet.create({
   transactionType: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#000',
     marginBottom: 4,
   },
   transactionDate: {
     fontSize: 14,
-    color: '#666',
+    color: GRAY_COLOR,
   },
   transactionAmount: {
     fontSize: 16,
     fontWeight: '600',
   },
   amountOut: {
-    color: '#000',
+    color: DARK_BLACK,
   },
   amountIn: {
-    color: '#4CAF50',
+    color: DARK_GREEN,
   },
 });
 export default MotionView;
