@@ -128,5 +128,7 @@
     "use_password": "Usar contraseña",
     "try_again": "Intentar de nuevo",
     "ok": "OK",
-    "motion_title": "Movimientos"
+    "motion_title": "Movimientos",
+    "available_balance": "Saldo disponible",
+    "current_balance": "Saldo actual"
 }

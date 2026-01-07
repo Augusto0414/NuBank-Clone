@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { getBalance } from 'service/wallet/wallet.service';
 import { useTransactionStore } from 'store/store';
 
 const { WHITE, GRAY_COLOR, LIGHT_GRAY, DARK_BLACK, DARK_GREEN, LIGHT_GREEN } = COLORS;
@@ -16,7 +17,28 @@ const MotionView = () => {
   const { transaction, getTransactionHistory } = useTransactionStore();
   const [searchText, setSearchText] = useState('');
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>(transaction);
-
+  const [loading, setLoading] = useState<boolean>(false);
+  const [balance, setBalance] = useState<number | null>(0);
+  const getBalanceData = async (): Promise<void> => {
+    try {
+      setLoading(true);
+      const { error, balance } = await getBalance();
+      if (error) {
+        setBalance(0);
+        setLoading(false);
+        return;
+      }
+      setBalance(balance);
+    } catch (error: Error | any) {
+      setLoading(false);
+      throw new Error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getBalanceData();
+  }, []);
   useEffect(() => {
     getTransactionHistory();
   }, [getTransactionHistory]);
@@ -54,7 +76,13 @@ const MotionView = () => {
 
   const renderSearchInput = (
     <View>
-      <Text style={{ fontSize: 24, fontWeight: '400', marginBottom: 30 }}>{t('motion_title')}</Text>
+      <View className="mb-10">
+        <Text style={{ fontSize: 18, fontWeight: '400' }}>{t('available_balance')}</Text>
+        <Text style={{ fontSize: 23, fontWeight: '700', marginTop: 4 }}>
+          {loading ? 'Cargando...' : formatMoney(balance || 0)}
+        </Text>
+      </View>
+      <Text style={{ fontSize: 24, fontWeight: '400', marginBottom: 20 }}>{t('motion_title')}</Text>
       <View style={[style.searchInputContainer, { marginBottom: 10 }]}>
         <Ionicons style={style.searchIcon} name="search" size={24} color={GRAY_COLOR} />
         <TextInput

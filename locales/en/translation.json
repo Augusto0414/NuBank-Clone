@@ -129,5 +129,7 @@
     "use_password": "Use Password",
     "try_again": "Try Again",
     "ok": "OK",
-    "motion_title": "Movements"
+    "motion_title": "Movements",
+    "available_balance": "Available balance",
+    "current_balance": "Current Balance"
 }
