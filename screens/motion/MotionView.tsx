@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTransactionStore } from 'store/store';
 
-const { WHITE, GRAY_COLOR, LIGHT_GRAY, DARK_BLACK, LIGHT_GREEN, DARK_GREEN } = COLORS;
+const { WHITE, GRAY_COLOR, LIGHT_GRAY, DARK_BLACK, DARK_GREEN, LIGHT_GREEN } = COLORS;
 const MotionView = () => {
   const insets = useSafeAreaInsets();
 
@@ -53,14 +53,17 @@ const MotionView = () => {
   };
 
   const renderSearchInput = (
-    <View style={[style.searchInputContainer, { marginBottom: 10 }]}>
-      <Ionicons style={style.searchIcon} name="search" size={24} color={GRAY_COLOR} />
-      <TextInput
-        placeholder={t('search_motion')}
-        value={searchText}
-        onChangeText={handleFilterChange}
-        style={style.searchInput}
-      />
+    <View>
+      <Text style={{ fontSize: 24, fontWeight: '400', marginBottom: 30 }}>{t('motion_title')}</Text>
+      <View style={[style.searchInputContainer, { marginBottom: 10 }]}>
+        <Ionicons style={style.searchIcon} name="search" size={24} color={GRAY_COLOR} />
+        <TextInput
+          placeholder={t('search_motion')}
+          value={searchText}
+          onChangeText={handleFilterChange}
+          style={style.searchInput}
+        />
+      </View>
     </View>
   );
 
@@ -73,15 +76,33 @@ const MotionView = () => {
         paddingBottom: insets.bottom,
       }}
       data={filteredTransactions}
+      maxToRenderPerBatch={10}
       keyExtractor={(item) => item.id.toString()}
       ListHeaderComponent={renderSearchInput}
       renderItem={({ item }) => (
         <View style={style.transactionItem}>
-          <View style={style.transactionInfo}>
-            <Text style={style.transactionType}>
-              {item.direction === 'OUT' ? t('sent_to') : t('received_from')} {item.counterparty}
-            </Text>
-            <Text style={style.transactionDate}>{formatDate(item.created_at)}</Text>
+          <View
+            style={[
+              style.transactionInfo,
+              { flexDirection: 'row', alignItems: 'center', gap: 12 },
+            ]}>
+            <View>
+              {item.direction === 'OUT' ? (
+                <View style={{ padding: 10, borderRadius: 32, backgroundColor: LIGHT_GRAY }}>
+                  <Ionicons name="cash-outline" size={24} color={DARK_BLACK} />
+                </View>
+              ) : (
+                <View style={{ padding: 10, borderRadius: 32, backgroundColor: LIGHT_GREEN }}>
+                  <Ionicons name="cash-outline" size={24} color={DARK_GREEN} />
+                </View>
+              )}
+            </View>
+            <View>
+              <Text style={style.transactionType}>
+                {item.direction === 'OUT' ? t('sent_to') : t('received_from')} {item.counterparty}
+              </Text>
+              <Text style={style.transactionDate}>{formatDate(item.created_at)}</Text>
+            </View>
           </View>
           <Text
             style={[
@@ -106,8 +127,8 @@ const style = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: LIGHT_GRAY,
     borderRadius: 32,
-    marginBottom: 16,
     paddingHorizontal: 12,
+    marginTop: 8,
   },
   searchIcon: {
     marginRight: 8,
@@ -115,8 +136,9 @@ const style = StyleSheet.create({
   },
   searchInput: {
     width: '100%',
-    padding: 10,
+    padding: 15,
     fontSize: 16,
+    flex: 1,
   },
   transactionItem: {
     flexDirection: 'row',

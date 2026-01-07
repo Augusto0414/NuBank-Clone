@@ -128,5 +128,6 @@
     "biometric_error_message": "An error occurred during biometric authentication.",
     "use_password": "Use Password",
     "try_again": "Try Again",
-    "ok": "OK"
+    "ok": "OK",
+    "motion_title": "Movements"
 }
